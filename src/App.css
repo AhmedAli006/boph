@@ -1,3 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Smooch+Sans:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+@font-face {
+  font-family: meshed ;
+  src: url('./assets/fonts/MeshedDisplay-Bold.ttf');
+}
+
+
+.bgwhite{
+background-color: '#EDF2FB';
+}
+.bgblue{
+background-color: "#00509d";
+}
+.bgblack{
+background-color:'#00072D' ;
+}
+.bglight{
+background-color:'#BFDBF7';
+}
+.bgcontrast{
+background-color: '#fca311';
+}
+
+
+.txtwhite{
+color: '#EDF2FB';
+}
+.txtblue{
+color: '#00509d';
+}
+.txtblack{
+color:'#00072D' ;
+}
+.txtlight{
+color:'#BFDBF7';
+}
+.txtcontrast{
+color: '#fca311';
+}
+.montserrat {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.poppins{
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 .App {
   text-align: center;
 }
