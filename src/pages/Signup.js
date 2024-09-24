@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import SelectComp from "../components/SelectComp";
+import axios from "axios";
 const bg = require('../assets/background-removebg-preview.png');
 
 
@@ -11,6 +12,67 @@ function Signup() {
 
   const togglePassword = () => {
     setIsRevealPassword((prevState) => !prevState);
+  }
+   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [stakeholder, setstakeholder] = useState('');
+  const [userId, setUserId] = useState(0);
+
+// const getId  = async ()=>{
+//  await axios.get('/api/getusers', userVal)
+//     .then(response => {
+//       console.log(response);
+      
+
+//     })
+//     .catch(error => {
+//       console.error(error);
+    
+//     });
+// }
+ 
+
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  const userVal = {
+    id:1,
+    name: username,
+    email: email,
+    password: password,
+    stakeholder: stakeholder,
+  }
+
+  // Email validation using regex
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailRegex.test(email)) {
+    alert("Invalid email address. Please try again.");
+    return;
+  }
+
+  // Password validation using regex
+  const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+  if (!passwordRegex.test(password)) {
+    alert("Invalid password. Please enter a password with at least 8 characters, including at least one letter, one number, and one special character.");
+    return;
+  }
+
+  // Add Axios to handle registration
+  await axios.post('http://localhost:8080/api/registerUser/', userVal)
+    .then(response => {
+      console.log(response);
+      // Handle successful registration
+      navigate("/login"); // Redirect to login page
+    })
+    .catch(error => {
+      console.log(error);
+      // Handle registration error
+      alert("Registration failed. Please try again.");
+    });
+}
+
+   const handleDropdownChange = (event) => {
+    setstakeholder(event.target.value);
   }
   return (
     <div class="flex flex-wrap w-full">
@@ -23,7 +85,7 @@ function Signup() {
           <p style={{ fontSize: 18 }} class="poppins text-center pt-4 ">
             we are glad to see you with us
           </p>
-          <form class="flex flex-col pt-3 md:pt-8 mx-9">
+          <form class="flex flex-col pt-3 md:pt-8 mx-9" onSubmit={handleSubmit}>
             <div class="flex flex-col pt-5">
               <div class="flex relative ">
                 <span class=" absolute inline-flex  items-center px-3 py-2.5 text-gray-500  text-sm">
@@ -47,6 +109,7 @@ function Signup() {
                   id="design-login-username"
                   class="pl-11 flex-1 appearance-none border rounded-xl  border-gray-300 w-full h-12 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                   placeholder="Username"
+                  onChange={(event) => setUsername(event.target.value)}
                 />
               </div>
             </div>
@@ -73,6 +136,7 @@ function Signup() {
                   id="design-login-Email"
                   class="poppins pl-11 rounded-xl flex-1 appearance-none border h-12 border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                   placeholder="Email"
+                  onChange={(event) => setEmail(event.target.value)}
                 />
               </div>
             </div>
@@ -100,6 +164,7 @@ function Signup() {
                   id="design-login-password"
                   class="poppins pl-11 rounded-xl flex-1 appearance-none border h-12 border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                   placeholder="Password"
+                  onChange={(event) => setPassword(event.target.value)}
                 />
                 <span onClick={togglePassword} class=" end-1  absolute inline-flex   items-center px-3 py-3 text-gray-500  text-sm">
                  {isRevealPassword ? <svg
@@ -143,7 +208,7 @@ function Signup() {
                 </span>
               </div>
             </div>
-            <SelectComp />
+            <SelectComp value={stakeholder} onChange={handleDropdownChange}/>
             <button
               type="submit"
               class="w-full px-4 py-2 text-base rounded-xl h-12 font-semibold poppins text-center text-white transition duration-200 ease-in bg-black shadow-md hover:text-black hover:bg-white focus:outline-none focus:ring-2"

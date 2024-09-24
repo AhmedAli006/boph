@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 const bg = require('../assets/background-removebg-preview.png');
@@ -11,10 +12,22 @@ const [email, setEmail] = useState('');
   const togglePassword = () => {
     setIsRevealPassword((prevState) => !prevState);
   }
-   const handleSubmit = (event) => {
+   const handleSubmit = async (event) => {
+    const userVal ={
+      email:email,
+      password:password
+    }
     event.preventDefault();
-    // You can add your login logic here
-    console.log(`Email: ${email}, Password: ${password}`);
+     await axios.post('http://localhost:8080/api/login', userVal)
+    .then(response => {
+      console.log(response);
+      // Handle successful registration
+    })
+    .catch(error => {
+      console.error(error);
+      // Handle registration error
+      alert("login failed. Please try again.");
+    });
   }
 
 
