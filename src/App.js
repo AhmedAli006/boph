@@ -5,15 +5,13 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Link
 } from "react-router-dom";
-import Sidebar from './components/SidebarComp';
 import Signup from './pages/Signup';
 import Home from './pages/Home';
 import Upload from './pages/Upload';
 import MyData from './pages/MyData';
 import Splash from './pages/Splash';
-// import Table from './components/TableComp';
+import Profile from './pages/Profile';
 
 
 function App() {
@@ -22,17 +20,18 @@ function App() {
 <Router>
   
     <Routes>
+      <Route path='/' element={<Signup/>}/>
       <Route path='/login' element={<Login/>}/>
-      <Route path='/signup' element={<Signup/>}/>
-      <Route path='/' element={<Home/>}/>
+      <Route path='/home' element={<Home/>}/>
       <Route path='/upload' element={<Upload/>}/>
-      <Route path='/data' element={<MyData/>}/>
+      <Route path='/transaction' element={<MyData/>}/>
+      <Route path='/profile' element={<Profile/>}/>
       <Route path='/splash' element={<Splash/>}/>
     </Routes>
  
 </Router>
- {/* <Login/> */}
-{/* <Sidebar/> */}
+
+
  
  </>
   );

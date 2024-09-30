@@ -3,39 +3,39 @@ import React from "react";
 function DashCards() {
   return (
     <>
-      {/* <div  class="flex mb-6  mt-3">
-        <div style={{backgroundColor: '#00072D',}} class="p-4  bg-white shadow-lg rounded-2xl w-full dark:bg-gray-800 m-6">
-          <div class="flex items-center ">
-            <span class="relative w-4 h-4 p-2 bg-green-500 rounded-full">
+      {/* <div  className="flex mb-6  mt-3">
+        <div style={{backgroundColor: '#00072D',}} className="p-4  bg-white shadow-lg rounded-2xl w-full dark:bg-gray-800 m-6">
+          <div className="flex items-center ">
+            <span className="relative w-4 h-4 p-2 bg-green-500 rounded-full">
               <svg
                 width="20"
                 fill="currentColor"
                 height="20"
-                class="absolute h-2 text-white transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                className="absolute h-2 text-white transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
                 viewBox="0 0 1792 1792"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path d="M1362 1185q0 153-99.5 263.5t-258.5 136.5v175q0 14-9 23t-23 9h-135q-13 0-22.5-9.5t-9.5-22.5v-175q-66-9-127.5-31t-101.5-44.5-74-48-46.5-37.5-17.5-18q-17-21-2-41l103-135q7-10 23-12 15-2 24 9l2 2q113 99 243 125 37 8 74 8 81 0 142.5-43t61.5-122q0-28-15-53t-33.5-42-58.5-37.5-66-32-80-32.5q-39-16-61.5-25t-61.5-26.5-62.5-31-56.5-35.5-53.5-42.5-43.5-49-35.5-58-21-66.5-8.5-78q0-138 98-242t255-134v-180q0-13 9.5-22.5t22.5-9.5h135q14 0 23 9t9 23v176q57 6 110.5 23t87 33.5 63.5 37.5 39 29 15 14q17 18 5 38l-81 146q-8 15-23 16-14 3-27-7-3-3-14.5-12t-39-26.5-58.5-32-74.5-26-85.5-11.5q-95 0-155 43t-60 111q0 26 8.5 48t29.5 41.5 39.5 33 56 31 60.5 27 70 27.5q53 20 81 31.5t76 35 75.5 42.5 62 50 53 63.5 31.5 76.5 13 94z"></path>
               </svg>
             </span>
-            <p class="ml-2 text-gray-700 text-md dark:text-gray-50">requests</p>
+            <p className="ml-2 text-gray-700 text-md dark:text-gray-50">requests</p>
           </div>
-          <div class="flex flex-col justify-start">
-            <p class="my-4 text-4xl font-bold text-left text-gray-800 dark:text-white">
+          <div className="flex flex-col justify-start">
+            <p className="my-4 text-4xl font-bold text-left text-gray-800 dark:text-white">
               36K
             </p>
           </div>
         </div>
-        <div style={{backgroundColor: '#00072D',}} class="p-4  bg-white shadow-lg rounded-2xl w-full dark:bg-gray-800 m-6">
-          <div class="flex items-center">
-            <span class="relative w-4 h-4 p-2 bg-red-500 rounded-full">
+        <div style={{backgroundColor: '#00072D',}} className="p-4  bg-white shadow-lg rounded-2xl w-full dark:bg-gray-800 m-6">
+          <div className="flex items-center">
+            <span className="relative w-4 h-4 p-2 bg-red-500 rounded-full">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke-width="2"
                 stroke="currentColor"
-                                class="absolute h-2.5 text-white transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                                className="absolute h-2.5 text-white transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
 
               >
                 <path
@@ -46,48 +46,48 @@ function DashCards() {
               </svg>
             </span>
 
-            <p class="ml-2 text-gray-700 text-md dark:text-gray-50">rejected</p>
+            <p className="ml-2 text-gray-700 text-md dark:text-gray-50">rejected</p>
           </div>
-          <div class="flex flex-col justify-start">
-            <p class="my-4 text-4xl font-bold text-left text-gray-800 dark:text-white">
+          <div className="flex flex-col justify-start">
+            <p className="my-4 text-4xl font-bold text-left text-gray-800 dark:text-white">
               36K
             </p>
           </div>
         </div>
-        <div style={{backgroundColor: '#00072D',}} class="p-4  bg-white shadow-lg rounded-2xl w-full dark:bg-gray-800 m-6">
-          <div class="flex items-center">
-            <span class="relative w-4 h-4 p-2 bg-green-500 rounded-full">
+        <div style={{backgroundColor: '#00072D',}} className="p-4  bg-white shadow-lg rounded-2xl w-full dark:bg-gray-800 m-6">
+          <div className="flex items-center">
+            <span className="relative w-4 h-4 p-2 bg-green-500 rounded-full">
               <svg
                 width="20"
                 fill="currentColor"
                 height="20"
-                class="absolute h-2 text-white transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                className="absolute h-2 text-white transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
                 viewBox="0 0 1792 1792"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path d="M1362 1185q0 153-99.5 263.5t-258.5 136.5v175q0 14-9 23t-23 9h-135q-13 0-22.5-9.5t-9.5-22.5v-175q-66-9-127.5-31t-101.5-44.5-74-48-46.5-37.5-17.5-18q-17-21-2-41l103-135q7-10 23-12 15-2 24 9l2 2q113 99 243 125 37 8 74 8 81 0 142.5-43t61.5-122q0-28-15-53t-33.5-42-58.5-37.5-66-32-80-32.5q-39-16-61.5-25t-61.5-26.5-62.5-31-56.5-35.5-53.5-42.5-43.5-49-35.5-58-21-66.5-8.5-78q0-138 98-242t255-134v-180q0-13 9.5-22.5t22.5-9.5h135q14 0 23 9t9 23v176q57 6 110.5 23t87 33.5 63.5 37.5 39 29 15 14q17 18 5 38l-81 146q-8 15-23 16-14 3-27-7-3-3-14.5-12t-39-26.5-58.5-32-74.5-26-85.5-11.5q-95 0-155 43t-60 111q0 26 8.5 48t29.5 41.5 39.5 33 56 31 60.5 27 70 27.5q53 20 81 31.5t76 35 75.5 42.5 62 50 53 63.5 31.5 76.5 13 94z"></path>
               </svg>
             </span>
-            <p class="ml-2 text-gray-700 text-md dark:text-gray-50">requests</p>
+            <p className="ml-2 text-gray-700 text-md dark:text-gray-50">requests</p>
           </div>
-          <div class="flex flex-col justify-start">
-            <p class="my-4 text-4xl font-bold text-left text-gray-800 dark:text-white">
+          <div className="flex flex-col justify-start">
+            <p className="my-4 text-4xl font-bold text-left text-gray-800 dark:text-white">
               36K
             </p>
           </div>
         </div>
       </div>
        */}
-      <div class="flex m-5 ml-96">
-        <div style={{backgroundColor: '#00072D',}} class="shadow-lg rounded-2xl bg-white dark:bg-gray-800 p-4 m-5">
-          <div class="flex-row gap-4 flex justify-center items-center">
-            <div class="flex-shrink-0">
-              <a href="#" class="relative block">
+      <div className="flex m-5 ml-96">
+        <div style={{backgroundColor: '#00072D',}} className="shadow-lg rounded-2xl bg-white dark:bg-gray-800 p-4 m-5">
+          <div className="flex-row gap-4 flex justify-center items-center">
+            <div className="flex-shrink-0">
+              <a href="#" className="relative block">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="currentColor"
-                  className="w-6 h-6 text-white"
+                  classNameName="w-6 h-6 text-white"
                 >
                   <path
                     fillRule="evenodd"
@@ -97,23 +97,23 @@ function DashCards() {
                 </svg>
               </a>
             </div>
-            <div class=" flex flex-col">
-              <span style={{fontFamily:'meshed'}} class="text-lg font-medium text-gray-600 dark:text-white">
+            <div className=" flex flex-col">
+              <span style={{fontFamily:'meshed'}} className="text-lg font-medium text-gray-600 dark:text-white">
                 Rejected
               </span>
-              <span class="text-xs text-gray-400">7</span>
+              <span className="text-xs text-gray-400">7</span>
             </div>
           </div>
         </div>
-        <div style={{backgroundColor: '#00072D',}} class="shadow-lg rounded-2xl bg-white dark:bg-gray-800 p-4 m-5">
-          <div class="flex-row gap-4 flex justify-center items-center">
-            <div class="flex-shrink-0">
-              <a href="#" class="relative block">
+        <div style={{backgroundColor: '#00072D',}} className="shadow-lg rounded-2xl bg-white dark:bg-gray-800 p-4 m-5">
+          <div className="flex-row gap-4 flex justify-center items-center">
+            <div className="flex-shrink-0">
+              <a href="#" className="relative block">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="currentColor"
-                  className="w-6 h-6 text-white"
+                  classNameName="w-6 h-6 text-white"
                 >
                   <path
                     fillRule="evenodd"
@@ -123,23 +123,23 @@ function DashCards() {
                 </svg>
               </a>
             </div>
-            <div class=" flex flex-col">
-              <span style={{fontFamily:'meshed'}} class="text-lg font-medium text-gray-600 dark:text-white">
+            <div className=" flex flex-col">
+              <span style={{fontFamily:'meshed'}} className="text-lg font-medium text-gray-600 dark:text-white">
                 Approved
               </span>
-              <span class="text-xs text-gray-400">12</span>
+              <span className="text-xs text-gray-400">12</span>
             </div>
           </div>
         </div>
-        <div style={{backgroundColor: '#00072D',}} class="shadow-lg rounded-2xl bg-white dark:bg-gray-800 p-4 m-5">
-          <div class="flex-row gap-4 flex justify-center items-center">
-            <div class="flex-shrink-0">
-              <a href="#" class="relative block">
+        <div style={{backgroundColor: '#00072D',}} className="shadow-lg rounded-2xl bg-white dark:bg-gray-800 p-4 m-5">
+          <div className="flex-row gap-4 flex justify-center items-center">
+            <div className="flex-shrink-0">
+              <a href="#" className="relative block">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="currentColor"
-                  className="w-6 h-6 text-white"
+                  classNameName="w-6 h-6 text-white"
                 >
                   <path d="M5.85 3.5a.75.75 0 0 0-1.117-1 9.719 9.719 0 0 0-2.348 4.876.75.75 0 0 0 1.479.248A8.219 8.219 0 0 1 5.85 3.5ZM19.267 2.5a.75.75 0 1 0-1.118 1 8.22 8.22 0 0 1 1.987 4.124.75.75 0 0 0 1.48-.248A9.72 9.72 0 0 0 19.266 2.5Z" />
                   <path
@@ -150,11 +150,11 @@ function DashCards() {
                 </svg>
               </a>
             </div>
-            <div class=" flex flex-col">
-              <span style={{fontFamily:'meshed'}} class="text-lg font-medium text-gray-600 dark:text-white">
+            <div className=" flex flex-col">
+              <span style={{fontFamily:'meshed'}} className="text-lg font-medium text-gray-600 dark:text-white">
                 Pending
               </span>
-              <span class="text-xs text-gray-400">3</span>
+              <span className="text-xs text-gray-400">3</span>
             </div>
           </div>
         </div>

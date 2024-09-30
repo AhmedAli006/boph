@@ -35,7 +35,7 @@ function classNames(...classes) {
                 <div className="flex h-16 items-center justify-between">
                   <div className="flex items-center">
 
-<h1 style={{marginLeft: '560px',fontWeight:'700', fontSize:'50px',fontFamily:'meshed'}} class='text-white mt-3'>BOPH</h1>
+<h1 style={{marginLeft: '560px',fontWeight:'700', fontSize:'50px',fontFamily:'meshed'}} className='text-white mt-3'>BOPH</h1>
                     
                   </div>
                   <div className="hidden md:block">

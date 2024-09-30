@@ -76,32 +76,32 @@ function Table() {
 ]
   return (
     <>
-      <div class=" max-w-5xl px-2 mx-auto sm:px-8">
+      <div className=" max-w-5xl px-2 mx-auto sm:px-8">
         {/* <DashCards /> */}
 
-        <div class="flex flex-row items-center  justify-center w-full p-2  shadow-xs">
-          <div class="hidden ml-8 text-lg text-black md:flex"></div>
-          <span style={{ width: "460px"}} class="flex h-10 text-sm  rounded-full cursor-pointer ">
+        <div className="flex flex-row items-center  justify-center w-full p-2  shadow-xs">
+          <div className="hidden ml-8 text-lg text-black md:flex"></div>
+          <span style={{ width: "460px"}} className="flex h-10 text-sm  rounded-full cursor-pointer ">
             <input
               type="search"
               name="serch"
               placeholder="Search"
-              class="flex-grow  px-4 text-sm rounded-l-full border border-gray-500 rounded-r-full focus:outline-none"
+              className="flex-grow  px-4 text-sm rounded-l-full border border-gray-500 rounded-r-full focus:outline-none"
             />
           </span>
-          <div class="flex flex-row-reverse ml-4 mr-4  ">
+          <div className="flex flex-row-reverse ml-4 mr-4  ">
             <button>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke-width="2"
+                strokeWidth="2"
                 stroke="currentColor"
-                class="w-7 h-7"
+                className="w-7 h-7"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
                 />
               </svg>
@@ -109,12 +109,12 @@ function Table() {
           </div>
         </div>
 
-        <div class="items-center w-full min-h-screen inline-block  ">
-          <div class="w-full  px-5 mx-auto lg:container ">
-            <div class="max-w-screen-lg mx-auto ">
-              <div class="min-w-full my-4 overflow-x-auto border rounded-md shadow-sm dark:border-gray-700">
-                <table class="min-w-full bg-white rounded whitespace-nowrap">
-                  <thead class="border-b bg-gray-50">
+        <div className="items-center w-full min-h-screen inline-block  ">
+          <div className="w-full  px-5 mx-auto lg:container ">
+            <div className="max-w-screen-lg mx-auto ">
+              <div className="min-w-full my-4 overflow-x-auto border rounded-md shadow-sm dark:border-gray-700">
+                <table className="min-w-full bg-white rounded whitespace-nowrap">
+                  <thead className="border-b bg-gray-50">
                     <tr>
                     <th className="px-3 py-3 text-xs font-normal text-left text-gray-500 uppercase align-middle">
                       Patient ID
@@ -133,7 +133,7 @@ function Table() {
                     </th>
                   </tr>
                 </thead>
-                  <tbody class="text-sm bg-white divide-y divide-gray-200">
+                  <tbody className="text-sm bg-white divide-y divide-gray-200">
                    {data.map((item, index) => (
                     <tr key={index}>
                       <td className="px-3 py-4 text-gray-600">{item.patientId}</td>
