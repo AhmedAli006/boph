@@ -75,13 +75,13 @@ function Table() {
   }
 ]
   return (
-    <>
-      <div className=" max-w-5xl px-2 mx-auto sm:px-8">
+ <>
+      <div className="max-w-5xl px-2 mx-auto sm:px-8">
         {/* <DashCards /> */}
 
         <div className="flex flex-row items-center  justify-center w-full p-2  shadow-xs">
           <div className="hidden ml-8 text-lg text-black md:flex"></div>
-          <span style={{ width: "460px"}} className="flex h-10 text-sm  rounded-full cursor-pointer ">
+          <span style={{ width: "460px" }} className="flex h-10 text-sm  rounded-full cursor-pointer ">
             <input
               type="search"
               name="serch"
@@ -116,41 +116,50 @@ function Table() {
                 <table className="min-w-full bg-white rounded whitespace-nowrap">
                   <thead className="border-b bg-gray-50">
                     <tr>
-                    <th className="px-3 py-3 text-xs font-normal text-left text-gray-500 uppercase align-middle">
-                      Patient ID
-                    </th>
-                    <th className="px-3 py-3 text-xs font-normal text-left text-gray-500 uppercase align-middle">
-                      Name
-                    </th>
-                    <th className="px-3 py-3 text-xs font-normal text-left text-gray-500 uppercase align-middle">
-                      EMR
-                    </th>
-                    <th className="px-3 py-3 text-xs font-normal text-left text-gray-500 uppercase align-middle">
-                      Date and Time
-                    </th>
-                    <th className="px-3 py-3 text-xs font-normal text-left text-gray-500 uppercase align-middle">
-                      Status
-                    </th>
-                  </tr>
-                </thead>
-                  <tbody className="text-sm bg-white divide-y divide-gray-200">
-                   {data.map((item, index) => (
-                    <tr key={index}>
-                      <td className="px-3 py-4 text-gray-600">{item.patientId}</td>
-                      <td className="px-3 py-4">{item.name}</td>
-                      <td className="px-3 py-4">{item.EMR}</td>
-                      <td className="px-3 py-4">{item.dateTime}</td>
-                      <td className="px-3 py-4">
-                        <span
-                          className={`px-4 py-1 text-sm rounded-full ${
-                            item.status === "Active" ? "bg-green-50 text-green-500" : "bg-red-50 text-red-500"
-                          }`}
-                        >
-                          {item.status}
-                        </span>
-                      </td>
+                      <th className="px-3 py-3 text-xs font-normal text-left text-gray-500 uppercase align-middle">
+                        Patient ID
+                      </th>
+                      <th className="px-3 py-3 text-xs font-normal text-left text-gray-500 uppercase align-middle">
+                        Name
+                      </th>
+                      <th className="px-3 py-3 text-xs font-normal text-left text-gray-500 uppercase align-middle">
+                        EMR
+                      </th>
+                      <th className="px-3 py-3 text-xs font-normal text-left text-gray-500 uppercase align-middle">
+                        Date and Time
+                      </th>
+                      <th className="px-3 py-3 text-xs font-normal text-left text-gray-500 uppercase align-middle">
+                        Status
+                      </th>
+                     
                     </tr>
-                  ))}
+                  </thead>
+                  <tbody className="text-sm bg-white divide-y divide-gray-200">
+                    {data.map((item, index) => (
+                      <tr key={index}>
+                        <td className="px-3 py-4 text-gray-600">{item.patientId}</td>
+                        <td className="px-3 py-4">{item.name}</td>
+                        <td className="px-3 py-4">{item.EMR}</td>
+                        <td className="px-3 py-4">{item.dateTime}</td>
+                        <td className="px-3 py-4">
+                          <span
+                            className={`px-4 py-1 text-sm rounded-full ${
+                              item.status === "Active" ? "bg-green-50 text-green-500" : "bg-red-50 text-red-500"
+                            }`}
+                          >
+                            {item.status}
+                          </span>
+                        </td>
+                        <td className="px-3 py-4">
+                          <button
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            onClick={() => console.log(`Button clicked for patient ${item.patientId}`)}
+                          >
+                            View 
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>

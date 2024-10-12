@@ -3,6 +3,8 @@ import React,{ Fragment }  from 'react'
    
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { logout } from '../redux/features/AuthSlice';
+import { useDispatch } from 'react-redux';
 const avatar = require('../assets/9434619.jpg');
 
 function Navbar() {
@@ -12,11 +14,17 @@ const user = {
   email: 'tom@example.com',
   imageUrl: avatar,
 }
+   const dispatch = useDispatch();
+const handleSignout = () => {
+  // Add your signout logic here
+dispatch(logout())
+  console.log('Signout button clicked');
+};
 
 const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
+  { name: 'Your Profile', href: '/profile' },
+  // { name: 'Settings', href: '#' },
+  { name: 'Sign out', href: '#',onclick:() => handleSignout()},
 ]
 
 function classNames(...classes) {
@@ -65,6 +73,7 @@ function classNames(...classes) {
                               <Menu.Item key={item.name}>
                                 {({ active }) => (
                                   <a
+                                  onClick={item.onclick}
                                     href={item.href}
                                     className={classNames(
                                       active ? 'bg-gray-100' : '',
@@ -76,6 +85,11 @@ function classNames(...classes) {
                                 )}
                               </Menu.Item>
                             ))}
+                            {/* <Menu.Item>
+                              <a className='mt-2 w-48 origin-top-right rounded-md block px-4 py-2 text-sm text-gray-700 shadow-lg ring-1 ring-black ring-opacity-5 '>
+                                signout
+                              </a>
+                            </Menu.Item> */}
                           </Menu.Items>
                         </Transition>
                       </Menu>

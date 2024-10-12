@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login } from "../redux/features/AuthSlice";
@@ -8,7 +8,16 @@ const bg = require('../assets/background-removebg-preview.png');
 function Login() {
   const navigate = useNavigate();
    const {userData, isLoading} = useSelector(state => state.auth);
-  //  console.log("user data Login page", userData);
+   console.log("user data Login page", userData);
+
+
+// useEffect(() => {
+// if(userData){
+//   navigate('/home')
+// }  
+// }, []);
+
+
   const [isRevealPassword, setIsRevealPassword] = useState(false);
 const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -76,6 +85,8 @@ const [email, setEmail] = useState('');
                   id="design-login-email"
                   className="pl-11 flex-1 appearance-none border rounded-xl  border-gray-300 w-full h-12 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                   placeholder="Email"
+                  style={{ textIndent:25}}
+
                    onChange={(event) => setEmail(event.target.value)}
              
                 />
@@ -104,6 +115,8 @@ const [email, setEmail] = useState('');
                   id="design-login-password"
                   className="poppins pl-11 rounded-xl flex-1 appearance-none border h-12 border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                   placeholder="Password"
+                  style={{ textIndent:25}}
+
                    onChange={(event) => setPassword(event.target.value)}
              
                 />
