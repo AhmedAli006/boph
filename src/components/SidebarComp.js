@@ -1,5 +1,5 @@
 import React from "react";
-import Table from "./TableComp";
+
 const logo = require("../assets/logo-removebg-preview.png");
 function Sidebar() {
   return (
@@ -108,29 +108,7 @@ function Sidebar() {
                 <span className="flex-1 ms-3 whitespace-nowrap">Upload</span>
               </a>
             </li>
-            <li>
-              <a
-                href="/transaction"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-               
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                                    className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M15.97 2.47a.75.75 0 0 1 1.06 0l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 1 1-1.06-1.06l3.22-3.22H7.5a.75.75 0 0 1 0-1.5h11.69l-3.22-3.22a.75.75 0 0 1 0-1.06Zm-7.94 9a.75.75 0 0 1 0 1.06l-3.22 3.22H16.5a.75.75 0 0 1 0 1.5H4.81l3.22 3.22a.75.75 0 1 1-1.06 1.06l-4.5-4.5a.75.75 0 0 1 0-1.06l4.5-4.5a.75.75 0 0 1 1.06 0Z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-
-                <span className="flex-1 ms-3 whitespace-nowrap">Transactions</span>
-              </a>
-            </li>
+            
           </ul>
         </div>
       </aside>

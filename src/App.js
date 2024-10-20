@@ -33,7 +33,7 @@ function App() {
       <Route path='/transaction' element={<MyData/>}/>
       <Route path='/profile' element={<Profile/>}/>
       <Route path='/emr' element={<EmrComp/>}/>
-      <Route path='/splash' element={<Splash/>}/>
+      {/* <Route path='/splash' element={<Splash/>}/> */}
     </Routes>
    {/* <Routes>
         {userData ? (

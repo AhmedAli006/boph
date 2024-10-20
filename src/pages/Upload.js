@@ -3,6 +3,8 @@ import Sidebar from '../components/SidebarComp'
 import NavbarComp from '../components/NavbarComp';
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import { v4 as uuidv4 } from 'uuid';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Upload = () => {
@@ -81,8 +83,12 @@ const Upload = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+const id = uuidv4();
+    
     // Call API to create EMR
     console.log('EMR created:', {
+      id,
       patientInformation,
       medicalHistory,
       vitalSigns,
