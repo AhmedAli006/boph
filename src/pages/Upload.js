@@ -1,11 +1,12 @@
 
 import Sidebar from '../components/SidebarComp'
 import NavbarComp from '../components/NavbarComp';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
 
 const Upload = () => {
   const [patientInformation, setPatientInformation] = useState({
@@ -81,13 +82,13 @@ const Upload = () => {
     summary: ''
   });
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-const id = uuidv4();
-    
-    // Call API to create EMR
-    console.log('EMR created:', {
+    const id = uuidv4();
+
+    // Prepare the data to be sent to the API
+    const emrData = {
       id,
       patientInformation,
       medicalHistory,
@@ -98,8 +99,40 @@ const id = uuidv4();
       assessmentAndPlan,
       progressNotes,
       dischargeSummary
-    });
+    };
+console.log(emrData);
+    try {
+      // Send data to the API
+      const response = await axios.post('http://localhost:8080/api/createEMR', emrData);
+      console.log('EMR created successfully:', response.data);
+      // Optionally, you can reset the form or show a success message here
+    } catch (error) {
+      console.error('Error creating EMR:', error);
+      // Optionally, show an error message to the user
+    }
   };
+
+   const [users, setUsers] = useState([]); // State to hold user data
+
+  // Fetch users from the API
+    const fetchUsers = async () => {
+    await axios.get('http://localhost:8080/api/getusers')
+    .then(result => {
+      const toJson= JSON.parse(result.data.response);
+      // console.log(toJson);
+      setUsers(toJson)
+
+    })
+    .catch(error => {
+      console.error(error);
+    
+    });
+    };
+  useEffect(() => {
+
+    fetchUsers();
+  }, []);
+
 
   return (
     <>
@@ -112,34 +145,34 @@ const id = uuidv4();
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="patientInformation">
               <Form.Label>Patient Information</Form.Label>
-              <Row>
-                <Col md={6}>
-                  <Form.Label>Patient ID</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={patientInformation.patientId}
-                    onChange={(event) =>
-                      setPatientInformation({
-                        ...patientInformation,
-                        patientId: event.target.value
-                      })
-                    }
-                  />
-                </Col>
-                <Col md={6}>
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={patientInformation.name}
-                    onChange={(event) =>
-                      setPatientInformation({
-                        ...patientInformation,
-                        name: event.target.value
-                      })
-                    }
-                  />
-                </Col>
-              </Row>
+             <Row>
+                  <Col md={6}>
+                    <Form.Label>Select Patient</Form.Label>
+                    <Form.Control
+                      as="select"
+                      value={patientInformation.patientId}
+                      onChange={(event) => {
+                        const selectedUser  = users.find(user => user.Record.id === event.target.value);
+                        setPatientInformation({
+                         ...patientInformation,
+                            patientId: selectedUser.Record.id,
+                            name: selectedUser.Record.name, // Assuming user object has 'name' field
+                            contactInformation: {
+                              ...patientInformation.contactInformation,
+                              email: selectedUser.Record.email
+                              } 
+                        });
+                      }}
+                    >
+                      <option value="">Select a patient</option>
+                      {users.map(user => (
+                        <option key={user.Record.id} value={user.Record.id}>
+                          {user.Record.name}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </Col>
+                </Row>
               <Row>
                 <Col md={6}>
                   <Form.Label>Date of Birth</Form.Label>

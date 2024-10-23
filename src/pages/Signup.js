@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import SelectComp from "../components/SelectComp";
 // import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
+import { useDispatch, useSelector } from "react-redux";
+import { signup } from "../redux/features/AuthSlice";
 
 
 const bg = require('../assets/background-removebg-preview.png');
@@ -11,6 +13,7 @@ const bg = require('../assets/background-removebg-preview.png');
 function Signup() {
   const navigate = useNavigate();
  const [isRevealPassword, setIsRevealPassword] = useState(false);
+ const dispatch = useDispatch()
 
   const togglePassword = () => {
     setIsRevealPassword((prevState) => !prevState);
@@ -70,6 +73,8 @@ console.log(userVal);
     alert("Please select a user name");
     return;
   }
+
+  dispatch(signup(userVal))
 
 
   // // Add Axios to handle registration

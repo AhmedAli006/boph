@@ -21,10 +21,10 @@ export const login = createAsyncThunk('/api/login', async (params, thunkApi) => 
     return thunkApi.rejectWithValue(error.response.data);
   }
 });
-export const signup = createAsyncThunk('/signup', async (params, thunkApi) => {
+export const signup = createAsyncThunk('/api/registerUser', async (params, thunkApi) => {
   
   try {
-    const response = await API.post('/signup', {params});
+    const response = await API.post('/api/registerUser', {params});
     console.log(' ~ signup ~ response:', response.data);
     return response.data;
   } catch (error) {
