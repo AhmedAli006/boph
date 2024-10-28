@@ -45,7 +45,7 @@ const handleSubmit = async (event) => {
   }
 
   // Check for stakeholder-specific required fields
-  if (stakeholder === "Patient") {
+  if (stakeholder === "patient") {
     const patientValidationRules = [
       { value: dateOfBirth, message: "Please enter your date of birth." },
       { value: sex, message: "Please select your sex." },
@@ -60,7 +60,7 @@ const handleSubmit = async (event) => {
     }
   }
 
-  if (stakeholder === "Doctor" && !specialization) {
+  if (stakeholder === "doctor" && !specialization) {
     alert("Please enter your specialization.");
     return;
   }
@@ -72,10 +72,10 @@ const handleSubmit = async (event) => {
     email: email,
     password: password,
     stakeholder: stakeholder,
-    dateOfBirth: stakeholder === "Patient" ? dateOfBirth : "",
-    sex: stakeholder === "Patient" ? sex : "",
-    phone: stakeholder === "Patient" ? phone : "",
-    specialization: stakeholder === "Doctor" ? specialization : "",
+    dateOfBirth: stakeholder === "patient" ? dateOfBirth : "",
+    sex: stakeholder === "patient" ? sex : "",
+    phone: stakeholder === "patient" ? phone : "",
+    specialization: stakeholder === "doctor" ? specialization : "",
   };
 
   try {
@@ -103,10 +103,10 @@ const handleSubmit = async (event) => {
   //     email: email,
   //     password: password,
   //     stakeholder: stakeholder,
-  //     dateOfBirth: stakeholder==="Patient" ? dateOfBirth : "", // Include only if Patient
-  //     sex: stakeholder==="Patient" ? sex : "", // Include only if Patient
-  //     phone: stakeholder==="Patient" ? phone : "", // Include only if Patient
-  //     specialization: stakeholder==="Doctor" ? specialization : "", // Include only if Patient
+  //     dateOfBirth: stakeholder==="patient" ? dateOfBirth : "", // Include only if patient
+  //     sex: stakeholder==="patient" ? sex : "", // Include only if patient
+  //     phone: stakeholder==="patient" ? phone : "", // Include only if patient
+  //     specialization: stakeholder==="doctor" ? specialization : "", // Include only if patient
   //   }
 
   //   console.log( "user values ----",userVal);
@@ -145,14 +145,14 @@ const handleSubmit = async (event) => {
     <div className="flex flex-wrap w-full">
       <div className="flex flex-col w-full md:w-1/2">
         <div className="flex flex-col justify-center px-8 mt-20 my-auto md:justify-start md:pt-0 md:px-24 lg:px-32">
-          <p style={{ fontSize: 70 }} className="text-3xl text-center montserrat">
+          <p style={{ fontSize: 70 }} className="text-3xl text-center montserrat pt-5">
             Welcome.
           </p>
-          <p style={{ fontSize: 18 }} className="poppins text-center pt-4 ">
+          <p style={{ fontSize: 18 }} className="poppins text-center pt-2 ">
             We are glad to see you with us
           </p>
           <form className="flex flex-col pt-3 md:pt-8 mx-9" onSubmit={handleSubmit}>
-            <div className="flex flex-col pt-5">
+            <div className="flex flex-col pt-2">
               <div className="flex relative ">
                 <span className=" absolute inline-flex  items-center  px-3 py-2.5 text-gray-500  text-sm">
                   {/* Username Icon */}
@@ -170,7 +170,7 @@ const handleSubmit = async (event) => {
                 />
               </div>
             </div>
-            <div className="flex flex-col pt-5 ">
+            <div className="flex flex-col pt-4 ">
               <div className="flex relative ">
                 <span className="  absolute inline-flex  items-center px-3 py-2.5 text-gray-500  text-sm">
                   <svg
@@ -200,7 +200,7 @@ const handleSubmit = async (event) => {
                 />
               </div>
             </div>
-            <div className="flex flex-col pt-5 mb-8">
+            <div className="flex flex-col pt-4 mb-8">
               <div className="flex relative ">
                   <span className="  absolute inline-flex  items-center px-3 py-2.5 text-gray-500  text-sm">
                   <svg
@@ -270,29 +270,8 @@ const handleSubmit = async (event) => {
 
               </div>
             </div>
-            <SelectComp value={stakeholder} onChange={handleDropdownChange} />
-            {stakeholder === "Patient" && (
-              <div>
-                <div className="flex flex-col pt-2">
-                  <div className="flex relative ">
-                    <span className="  absolute inline-flex  items-center px-3 py-2.5 text-gray-500  text-sm">
-                      {/* Date of Birth Icon */}
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 4h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                    </span>
-                    <input
-                      type="date"
-                      id="design-login-dateOfBirth"
-                      className="poppins pl-11 rounded-xl flex-1 appearance-none border h-12 border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-                      placeholder="Date of Birth"
-                      style={{ textIndent: 25 }}
-                      onChange={(event) => setDateOfBirth(event.target.value)}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col pt-5">
-  <div className="flex items-center">
+             <div className="flex flex-col ">
+  <div className="flex items-center pb-3">
     <span className="inline-flex items-center px-3 py-2.5 text-gray-500 text-sm">
       {/* Sex Icon */}
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
@@ -313,7 +292,29 @@ const handleSubmit = async (event) => {
     </div>
   </div>
 </div>
-                <div className="flex flex-col pt-5 pb-5">
+            <SelectComp value={stakeholder} onChange={handleDropdownChange} />
+            {stakeholder === "patient" && (
+              <div>
+                <div className="flex flex-col pt-2">
+                  <div className="flex relative ">
+                    <span className="  absolute inline-flex  items-center px-3 py-2.5 text-gray-500  text-sm">
+                      {/* Date of Birth Icon */}
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 4h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    </span>
+                    <input
+                      type="date"
+                      id="design-login-dateOfBirth"
+                      className="poppins pl-11 rounded-xl flex-1 appearance-none border h-12 border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                      placeholder="Date of Birth"
+                      style={{ textIndent: 25 }}
+                      onChange={(event) => setDateOfBirth(event.target.value)}
+                    />
+                  </div>
+                </div>
+               
+                <div className="flex flex-col pt-4 pb-5">
                   <div className="flex relative ">
                     <span className="  absolute inline-flex  items-center px-3 py-2.5 text-gray-500  text-sm">
                       {/* Phone Icon */}
@@ -333,7 +334,7 @@ const handleSubmit = async (event) => {
               </div>
             )}
  {/* Specialization Input */}
-            {stakeholder === "Doctor" && (
+            {stakeholder === "doctor" && (
               <div className="flex flex-col   pb-5">
                 <div className="flex relative ">
                   <span className="  absolute inline-flex  items-center px-3 py-2.5 text-gray-500  text-sm">
