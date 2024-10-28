@@ -133,6 +133,19 @@ console.log(emrData);
     fetchUsers();
   }, []);
 
+  const calculateAge = (dateOfBirth) => {
+    const birthDate = new Date(dateOfBirth);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+
+    // Adjust age if the birth date has not occurred yet this year
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+};
+
 
   return (
     <>
@@ -144,7 +157,7 @@ console.log(emrData);
           <h2>Create EMR</h2>
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="patientInformation">
-              <Form.Label>Patient Information</Form.Label>
+              <Form.Label className="font-bold my-4 ">Patient Information</Form.Label>
              <Row>
                   <Col md={6}>
                     <Form.Label>Select Patient</Form.Label>
@@ -153,13 +166,18 @@ console.log(emrData);
                       value={patientInformation.patientId}
                       onChange={(event) => {
                         const selectedUser  = users.find(user => user.Record.id === event.target.value);
+                         const age = calculateAge(selectedUser.Record.dateOfBirth);
                         setPatientInformation({
                          ...patientInformation,
                             patientId: selectedUser.Record.id,
-                            name: selectedUser.Record.name, // Assuming user object has 'name' field
+                            name: selectedUser.Record.name, 
+                            age: age, 
+                            dateOfBirth: selectedUser.Record.dateOfBirth, 
+                            sex: selectedUser.Record.sex, 
                             contactInformation: {
                               ...patientInformation.contactInformation,
-                              email: selectedUser.Record.email
+                              email: selectedUser.Record.email,
+                            phoneNumber: selectedUser.Record.phone, 
                               } 
                         });
                       }}
@@ -271,7 +289,7 @@ console.log(emrData);
             </Form.Group>
 
             <Form.Group controlId="medicalHistory">
-              <Form.Label>Medical History</Form.Label>
+              <Form.Label className="font-bold my-4 ">Medical History</Form.Label>
               <Row>
                 <Col md={6}>
                   <Form.Label>Allergies</Form.Label>
@@ -421,10 +439,10 @@ console.log(emrData);
             </Form.Group>
 
             <Form.Group controlId="chiefComplaint">
-              <Form.Label >Chief Complaint</Form.Label>
+              <Form.Label   className="font-bold my-4">Chief Complaint</Form.Label>
               <Row>
                 <Col md={6}>
-                  <Form.Label>Chief Complaint</Form.Label>
+                  <Form.Label >Chief Complaint</Form.Label>
                   <Form.Control
                     type="text"
                     value={chiefComplaint.chiefComplaint}
@@ -468,7 +486,7 @@ console.log(emrData);
             </Form.Group>
 
             <Form.Group controlId="physicalExamination">
-              <Form.Label>Physical Examination</Form.Label>
+              <Form.Label className="font-bold my-4">Physical Examination</Form.Label>
               <Row>
                 <Col md={6}>
                   <Form.Label>General Appearance</Form.Label>
@@ -571,7 +589,7 @@ console.log(emrData);
             </Form.Group>
 
             <Form.Group controlId="diagnosticTests">
-              <Form.Label>Diagnostic Tests</Form.Label>
+              <Form.Label className="font-bold my-4 ">Diagnostic Tests</Form.Label>
               <Row>
                 <Col md={6}>
                   <Form.Label>Lab Results</Form.Label>
@@ -618,7 +636,7 @@ console.log(emrData);
             </Form.Group>
 
             <Form.Group controlId="assessmentAndPlan">
-              <Form.Label>Assessment and Plan</Form.Label>
+              <Form.Label  className="font-bold my-4">Assessment and Plan</Form.Label>
               <Row>
                 <Col md={6}>
                   <Form.Label>Assessment</Form.Label>
@@ -693,7 +711,7 @@ console.log(emrData);
             </Form.Group>
 
             <Form.Group controlId="progressNotes">
-              <Form.Label>Progress Notes</Form.Label>
+              <Form.Label className="font-bold my-4 ">Progress Notes</Form.Label>
               <Row>
                 <Col md={6}>
                   <Form.Label>Date</Form.Label>
@@ -746,7 +764,7 @@ console.log(emrData);
             </Form.Group>
 
             <Form.Group controlId="dischargeSummary">
-              <Form.Label>Discharge Summary</Form.Label>
+              <Form.Label className="font-bold my-4 ">Discharge Summary</Form.Label>
               <Row>
                 <Col md={6}>
                   <Form.Label>Date</Form.Label>

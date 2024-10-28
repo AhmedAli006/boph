@@ -1,135 +1,171 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SelectComp from "../components/SelectComp";
-// import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { signup } from "../redux/features/AuthSlice";
-
 
 const bg = require('../assets/background-removebg-preview.png');
 
-
 function Signup() {
   const navigate = useNavigate();
- const [isRevealPassword, setIsRevealPassword] = useState(false);
- const dispatch = useDispatch()
+  const [isRevealPassword, setIsRevealPassword] = useState(false);
+  const dispatch = useDispatch();
 
   const togglePassword = () => {
     setIsRevealPassword((prevState) => !prevState);
   }
-   const [email, setEmail] = useState('');
+
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
-  const [stakeholder, setstakeholder] = useState('');
-
-// const getId  = async ()=>{
-//  await axios.get('/api/getusers')
-//     .then(response => {
-//       console.log(response);
-      
-
-//     })
-//     .catch(error => {
-//       console.error(error);
-    
-//     });
-// }
-
- 
-
+  const [stakeholder, setStakeholder] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [sex, setSex] = useState('');
+  const [phone, setPhone] = useState('');
+    const [specialization, setSpecialization] = useState('');
+   // New state for user type
 const handleSubmit = async (event) => {
   event.preventDefault();
-    const newUserId = uuidv4();
+
+  // Define validation rules
+  const validationRules = [
+    { value: username, message: "Please enter a username." },
+    { value: email, message: "Please enter an email." },
+    { value: password, message: "Please enter a password." },
+    { value: stakeholder, message: "Please select a stakeholder." },
+  ];
+
+  // Check for general required fields
+  for (const rule of validationRules) {
+    if (!rule.value) {
+      alert(rule.message);
+      return;
+    }
+  }
+
+  // Check for stakeholder-specific required fields
+  if (stakeholder === "Patient") {
+    const patientValidationRules = [
+      { value: dateOfBirth, message: "Please enter your date of birth." },
+      { value: sex, message: "Please select your sex." },
+      { value: phone, message: "Please enter your phone number." },
+    ];
+
+    for (const rule of patientValidationRules) {
+      if (!rule.value) {
+        alert(rule.message);
+        return;
+      }
+    }
+  }
+
+  if (stakeholder === "Doctor" && !specialization) {
+    alert("Please enter your specialization.");
+    return;
+  }
+
+  const newUser  = uuidv4();
   const userVal = {
-    id: newUserId,
+    id: newUser ,
     name: username,
     email: email,
     password: password,
     stakeholder: stakeholder,
+    dateOfBirth: stakeholder === "Patient" ? dateOfBirth : "",
+    sex: stakeholder === "Patient" ? sex : "",
+    phone: stakeholder === "Patient" ? phone : "",
+    specialization: stakeholder === "Doctor" ? specialization : "",
+  };
+
+  try {
+    const resultAction = await dispatch(signup(userVal));
+    if (signup.fulfilled.match(resultAction)) {
+      // Handle successful signup
+      alert("Registration successful!");
+      
+    } else {
+      // Handle errors (e.g., user already exists)
+      alert(resultAction.payload || "An error occurred during registration.");
+    }
+  } catch (error) {
+    console.error("Error during registration:", error);
+    alert("An error occurred while processing your request.");
+  }
+};
+
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+  //   const newUser = uuidv4();
+  //   const userVal = {
+  //     id: newUser,
+  //     name: username,
+  //     email: email,
+  //     password: password,
+  //     stakeholder: stakeholder,
+  //     dateOfBirth: stakeholder==="Patient" ? dateOfBirth : "", // Include only if Patient
+  //     sex: stakeholder==="Patient" ? sex : "", // Include only if Patient
+  //     phone: stakeholder==="Patient" ? phone : "", // Include only if Patient
+  //     specialization: stakeholder==="Doctor" ? specialization : "", // Include only if Patient
+  //   }
+
+  //   console.log( "user values ----",userVal);
+  //   // Email validation using regex
+  //   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  //   if (!emailRegex.test(email)) {
+  //     alert("Invalid email address. Please try again.");
+  //     return;
+  //   }
+
+  //   // Password validation using regex
+  //   const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+  //   if (!passwordRegex.test(password)) {
+  //     alert("Invalid password. Please enter a password with at least 8 characters, including at least one letter, one number, and one special character.");
+  //     return;
+  //   }
+
+  //   if (stakeholder === '') {
+  //     alert("Please select a stakeholder");
+  //     return;
+  //   }
+  //   if (username === '') {
+  //     alert("Please select a user name");
+  //     return;
+  //   }
+
+  //   dispatch(signup(userVal));
+    
+  // }
+
+  const handleDropdownChange = (event) => {
+    setStakeholder(event.target.value);
   }
 
-
-console.log(userVal);
-  // Email validation using regex
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  if (!emailRegex.test(email)) {
-    alert("Invalid email address. Please try again.");
-    return;
-  }
-
-  // Password validation using regex
-  const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
-  if (!passwordRegex.test(password)) {
-    alert("Invalid password. Please enter a password with at least 8 characters, including at least one letter, one number, and one special character.");
-    return;
-  }
-
-   if (stakeholder === '' ) {
-    alert("Please select a stakeholder");
-    return;
-  }
-   if (username === '' ) {
-    alert("Please select a user name");
-    return;
-  }
-
-  dispatch(signup(userVal))
-
-
-  // // Add Axios to handle registration
-  // await axios.post('http://localhost:8080/api/registerUser/', userVal)
-  //   .then(response => {
-  //     console.log(response);
-  //     // Handle successful registration
-  //     navigate("/login"); // Redirect to login page
-  //   })
-  //   .catch(error => {
-  //     console.log(error);
-  //     // Handle registration error
-  //     alert("Registration failed. Please try again.");
-  //   });
-}
-
-   const handleDropdownChange = (event) => {
-    setstakeholder(event.target.value);
-  }
   return (
     <div className="flex flex-wrap w-full">
       <div className="flex flex-col w-full md:w-1/2">
-       
         <div className="flex flex-col justify-center px-8 mt-20 my-auto md:justify-start md:pt-0 md:px-24 lg:px-32">
           <p style={{ fontSize: 70 }} className="text-3xl text-center montserrat">
             Welcome.
           </p>
           <p style={{ fontSize: 18 }} className="poppins text-center pt-4 ">
-            we are glad to see you with us
+            We are glad to see you with us
           </p>
           <form className="flex flex-col pt-3 md:pt-8 mx-9" onSubmit={handleSubmit}>
             <div className="flex flex-col pt-5">
               <div className="flex relative ">
                 <span className=" absolute inline-flex  items-center  px-3 py-2.5 text-gray-500  text-sm">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="2"
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-                    />
+                  {/* Username Icon */}
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                   </svg>
                 </span>
                 <input
                   type="text"
                   id="design-login-username"
-                  className="pl-11 flex-1 appearance-none border rounded-xl  border-gray-300 w-full h-12 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                  className="pl-11 flex-1 appearance-none border rounded-xl  border-gray-300 w-full h-12 py-2 px-4 bg-white text-gray -700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                   placeholder="Username"
-                  style={{ textIndent:25}}
+                  style={{ textIndent: 25 }}
                   onChange={(event) => setUsername(event.target.value)}
                 />
               </div>
@@ -152,20 +188,21 @@ console.log(userVal);
                     />
                   </svg>
                 </span>
+
+                
                 <input
                   type="text"
                   id="design-login-Email"
                   className="poppins pl-11 rounded-xl flex-1 appearance-none border h-12 border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                   placeholder="Email"
-                  style={{ textIndent:25}}
-
+                  style={{ textIndent: 25 }}
                   onChange={(event) => setEmail(event.target.value)}
                 />
               </div>
             </div>
             <div className="flex flex-col pt-5 mb-8">
               <div className="flex relative ">
-                <span className="  absolute inline-flex  items-center px-3 py-2.5 text-gray-500  text-sm">
+                  <span className="  absolute inline-flex  items-center px-3 py-2.5 text-gray-500  text-sm">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -182,7 +219,8 @@ console.log(userVal);
                   </svg>
                    
                 </span>
-                 <input
+              
+                    <input
                   type={isRevealPassword ? 'text' : 'password'}
                   id="design-login-password"
                   className="poppins pl-11 rounded-xl flex-1 appearance-none border h-12 border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
@@ -226,15 +264,95 @@ console.log(userVal);
                       strokeLinejoin="round"
                       d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88"
                     />
-                  </svg>}
-                  
-                  
-                  
-                </span>
+                  </svg>
+                  }
+                  </span>
+
               </div>
             </div>
-            <SelectComp  value={stakeholder} onChange={handleDropdownChange}/>
-            <button
+            <SelectComp value={stakeholder} onChange={handleDropdownChange} />
+            {stakeholder === "Patient" && (
+              <div>
+                <div className="flex flex-col pt-2">
+                  <div className="flex relative ">
+                    <span className="  absolute inline-flex  items-center px-3 py-2.5 text-gray-500  text-sm">
+                      {/* Date of Birth Icon */}
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 4h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    </span>
+                    <input
+                      type="date"
+                      id="design-login-dateOfBirth"
+                      className="poppins pl-11 rounded-xl flex-1 appearance-none border h-12 border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                      placeholder="Date of Birth"
+                      style={{ textIndent: 25 }}
+                      onChange={(event) => setDateOfBirth(event.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col pt-5">
+  <div className="flex items-center">
+    <span className="inline-flex items-center px-3 py-2.5 text-gray-500 text-sm">
+      {/* Sex Icon */}
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+      </svg>
+    </span>
+    <label className="font-semibold text-gray-700 mr-4">Sex:</label>
+    <div className="flex space-x-4">
+      <label className="flex items-center">
+        <input type="radio" name="sex" value="Male" required onChange={(event) => setSex(event.target.value)} className="mr-2" />
+        Male
+      </label>
+      <label className="flex items-center">
+        <input type="radio" name="sex" value="Female" required onChange={(event) => setSex(event.target.value)} className="mr-2" />
+        Female
+      </label>
+     
+    </div>
+  </div>
+</div>
+                <div className="flex flex-col pt-5 pb-5">
+                  <div className="flex relative ">
+                    <span className="  absolute inline-flex  items-center px-3 py-2.5 text-gray-500  text-sm">
+                      {/* Phone Icon */}
+                      {/* <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" className="w-6 h-6 text-gray-500" ><path d="M798-120q-125 0-247-54.5T329-329Q229-429 174.5-551T120-798q0-18 12-30t30-12h162q14 0 25 9.5t13 22.5l26 140q2 16-1 27t-11 19l-97 98q20 37 47.5 71.5T387-386q31 31 65 57.5t72 48.5l94-94q9-9 23.5-13.5T670-390l138 28q14 4 23 14.5t9 23.5v162q0 18-12 30t-30 12ZM241-600l66-66-17-94h-89q5 41 14 81t26 79Zm358 358q39 17 79.5 27t81.5 13v-88l-94-19-67 67ZM241-600Zm358 358Z"/></svg> */}
+                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" className="w-6 h-6 text-gray-200" fill="#6b7280"><path d="M798-120q-125 0-247-54.5T329-329Q229-429 174.5-551T120-798q0-18 12-30t30-12h162q14 0 25 9.5t13 22.5l26 140q2 16-1 27t-11 19l-97 98q20 37 47.5 71.5T387-386q31 31 65 57.5t72 48.5l94-94q9-9 23.5-13.5T670-390l138 28q14 4 23 14.5t9 23.5v162q0 18-12 30t-30 12ZM241-600l66-66-17-94h-89q5 41 14 81t26 79Zm358 358q39 17 79.5 27t81.5 13v-88l-94-19-67 67ZM241-600Zm358 358Z"/></svg>
+                    </span>
+                    <input
+                      type="tel"
+                      id="design-login-phone"
+                      className="poppins pl-11 rounded-xl flex-1 appearance-none border h-12 border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                      placeholder="Phone"
+                      style={{ textIndent: 25 }}
+                      onChange={(event) => setPhone(event.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+ {/* Specialization Input */}
+            {stakeholder === "Doctor" && (
+              <div className="flex flex-col   pb-5">
+                <div className="flex relative ">
+                  <span className="  absolute inline-flex  items-center px-3 py-2.5 text-gray-500  text-sm">
+                    {/* Specialization Icon */}
+                   <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#6b7280"><path d="M540-80q-108 0-184-76t-76-184v-23q-86-14-143-80.5T80-600v-240h120v-40h80v160h-80v-40h-40v160q0 66 47 113t113 47q66 0 113-47t47-113v-160h-40v40h-80v-160h80v40h120v240q0 90-57 156.5T360-363v23q0 75 52.5 127.5T540-160q75 0 127.5-52.5T720-340v-67q-35-12-57.5-43T640-520q0-50 35-85t85-35q50 0 85 35t35 85q0 39-22.5 70T800-407v67q0 108-76 184T540-80Zm220-400q17 0 28.5-11.5T800-520q0-17-11.5-28.5T760-560q-17 0-28.5 11.5T720-520q0 17 11.5 28.5T760-480Zm0-40Z"/></svg>
+                  </span>
+                  <input
+                    type="text"
+                    id="design-login-specialization"
+                    className="poppins pl-11 rounded-xl flex-1 appearance-none border h-12 border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                    placeholder="Specialization"
+                    style={{ textIndent: 25 }}
+                    onChange={(event) => setSpecialization(event.target.value)}
+                  />
+                </div>
+              </div>
+            )}
+
+            < button
               type="submit"
               className="w-full px-4 py-2 text-base rounded-xl h-12 font-semibold poppins text-center text-white transition duration-200 ease-in bg-black shadow-md hover:text-black hover:bg-white focus:outline-none focus:ring-2"
             >
@@ -243,7 +361,7 @@ console.log(userVal);
           </form>
           <div className="pt-12 pb-12 text-center">
             <p className="poppins">
-              have an account?
+              Have an account?
               <p
                 onClick={() => {
                   navigate("/login");
@@ -257,7 +375,7 @@ console.log(userVal);
           </div>
         </div>
       </div>
-     <div style={{backgroundColor: '#EDF2FB',}} className="w-1/2  shadow-2xl">
+      <div style={{ backgroundColor: '#EDF2FB', }} className="w-1/2  shadow-2xl">
         <img
           className="hidden object-scale-down w-full h-screen md:block"
           src={bg}
