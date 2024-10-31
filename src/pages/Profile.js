@@ -8,15 +8,17 @@ import { useNavigate } from 'react-router-dom';
 function Profile() {
     const [emrData, setEmrData] = useState([]); // State to hold EMR data of the user Patient logged in
     const { userData, isLoading } = useSelector(state => state.auth); // Access user data from Redux
+    console.log(userData);
     const navigate = useNavigate();
 
     const getEmr = async () => {
         try {
             // Send data to the API
             const response = await axios.get('http://localhost:8080/api/getallemr');
-            console.log('EMR data retrieved:',response.data.response[0].Record.emrData);
+            console.log('EMR data retrieved:', response.data.response);
+
             // Filter EMR data based on the logged-in user
-            const filteredEmrData = response.data.response.filter(item => item.Record.id === userData.id);
+            const filteredEmrData = response.data.response.filter(item => item.Record.patientInformation.patientId === userData.id);
 
             setEmrData(filteredEmrData); // Store the filtered EMR data in state
         } catch (error) {
@@ -26,14 +28,11 @@ function Profile() {
     };
 
     useEffect(() => {
-        if (userData) {
+        
             getEmr();
-        }
-    }, [userData]);
+        
+    }, []);
 
-    if (isLoading) {
-        return <div>Loading...</div>; // Show loading indicator while fetching data
-    }
 
     return (
         <>
@@ -44,19 +43,28 @@ function Profile() {
                     <thead>
                         <tr>
                             <th className="border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-bold text-gray-900">S.no</th>
-                            <th className="border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-bold text-gray-900">Date</th>
-                            <th className="border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-bold text-gray-900">Doctor Name</th>
-                            <th className="border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-bold text-gray-900">EMR Reports</th>
+                            <th className="border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-bold text-gray-900">Patient Name</th>
+                            <th className="border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-bold text-gray-900">Chief Complaint</th>
+                            <th className="border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-bold text-gray-900">Date of Birth</th>
+                            <th className="border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-bold text-gray-900">Vital Signs</th>
                             <th className="border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-bold text-gray-900"></th>
                         </tr>
                     </thead>
                     <tbody>
                         {emrData.map((item, index) => (
+
                             <tr className="text-gray-700" key={item.Key}>
                                 <td className="border-b-2 p-4 dark:border-dark-5">{index + 1}</td>
-                                <td className="border-b-2 p-4 dark:border-dark-5">{item.Record.date || 'N/A'}</td> {/* Replace with actual date if available */}
-                                <td className="border-b-2 p-4 dark:border-dark-5">{item.Record.doctorName || 'N/A'}</td> {/* Replace with actual doctor name if available */}
-                                <td className="border-b-2 p-4 dark:border-dark-5">{item.Record.id}</td> {/* EMR Reports */}
+                                <td className="border-b-2 p-4 dark:border-dark-5">{item.Record.patientInformation.name || 'N/A'}</td>
+                                <td className="border-b-2 p-4 dark:border-dark-5">{item.Record.chiefComplaint.chiefComplaint || 'N/A'}</td>
+                                <td className="border-b-2 p-4 dark:border-dark-5">{item.Record.patientInformation.dateOfBirth || 'N/A'}</td>
+                                <td className="border-b-2 p-4 dark:border-dark-5">
+                                    <div>
+                                        <strong>BP:</strong> {item.Record.vitalSigns.bloodPressure} <br />
+                                        <strong>Pulse:</strong> {item.Record.vitalSigns.pulse} <br />
+                                        <strong>Temp:</strong> {item.Record.vitalSigns.temperature} <br />
+                                    </div>
+                                </td>
                                 <td className="border-b-2 p-4 dark:border-dark-5">
                                     <div className="flex place-content-center">
                                         <button className="text-blue-500 hover:underline" onClick={() => { navigate('/emr') }}>Open Report</button>
@@ -65,7 +73,7 @@ function Profile() {
                             </tr>
                         ))}
                     </tbody>
-                </table>
+                </ table>
             </div>
         </>
     );
