@@ -12,7 +12,7 @@ function SelectComp({ value, onChange }) {
       >
         <option value="">Select a Role</option>
         <option value="patient">Patient</option>
-        <option value="poctor">Doctor</option>
+        <option value="doctor">Doctor</option>
         {/* <option value="Ministry">Ministry</option> */}
       </select>
     </label>

@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 function Profile() {
     const [emrData, setEmrData] = useState([]); // State to hold EMR data of the user Patient logged in
     const { userData, isLoading } = useSelector(state => state.auth); // Access user data from Redux
-    console.log(userData);
     const navigate = useNavigate();
 
     const getEmr = async () => {
@@ -18,7 +17,7 @@ function Profile() {
             console.log('EMR data retrieved:', response.data.response);
 
             // Filter EMR data based on the logged-in user
-            const filteredEmrData = response.data.response.filter(item => item.Record.patientInformation.patientId === userData.id);
+            const filteredEmrData = response.data.response.filter(item => item.Record.patientInformation.patientId === userData.response.id);
 
             setEmrData(filteredEmrData); // Store the filtered EMR data in state
         } catch (error) {
@@ -28,11 +27,8 @@ function Profile() {
     };
 
     useEffect(() => {
-        
-            getEmr();
-        
+        getEmr();
     }, []);
-
 
     return (
         <>
@@ -52,7 +48,6 @@ function Profile() {
                     </thead>
                     <tbody>
                         {emrData.map((item, index) => (
-
                             <tr className="text-gray-700" key={item.Key}>
                                 <td className="border-b-2 p-4 dark:border-dark-5">{index + 1}</td>
                                 <td className="border-b-2 p-4 dark:border-dark-5">{item.Record.patientInformation.name || 'N/A'}</td>
@@ -67,13 +62,16 @@ function Profile() {
                                 </td>
                                 <td className="border-b-2 p-4 dark:border-dark-5">
                                     <div className="flex place-content-center">
-                                        <button className="text-blue-500 hover:underline" onClick={() => { navigate('/emr') }}>Open Report</button>
+                                        <button 
+                                            className="text-blue- 500 hover:underline" 
+                                            onClick={() => navigate('/emr', { state: item })} 
+                                        >Open Report</button>
                                     </div>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
-                </ table>
+                </table>
             </div>
         </>
     );
