@@ -1,4 +1,3 @@
-
 import Sidebar from '../components/SidebarComp';
 import NavbarComp from '../components/NavbarComp';
 import React, { useEffect, useState } from 'react';
@@ -6,6 +5,7 @@ import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const Upload = () => {
   const [patientInformation, setPatientInformation] = useState({
@@ -32,7 +32,6 @@ const Upload = () => {
     bloodPressure: '',
     pulse: '',
     respiratoryRate: ''
-    // Removed oxygenSaturation
   });
 
   const [chiefComplaint, setChiefComplaint] = useState({
@@ -41,18 +40,13 @@ const Upload = () => {
     reviewOfSystems: ''
   });
 
+  // Updated physicalExamination state to have a single field
   const [physicalExamination, setPhysicalExamination] = useState({
-    generalAppearance: '',
-    headAndNeck: '',
-    chest: '',
-    abdomen: '',
-    extremities: '',
-    neurological: ''
+    examinationDetails: '' // Single field for physical examination
   });
 
   const [diagnosticTests, setDiagnosticTests] = useState({
     labResults: '',
-    // Removed imagingStudies
     otherTests: ''
   });
 
@@ -67,8 +61,12 @@ const Upload = () => {
   const [progressNotes, setProgressNotes] = useState({
     date: '',
     time: '',
-    note: ''
+    note: '',
+    dateOfIssue: ''
   });
+ const currentDate = new Date().toISOString().split('T')[0];
+  const { userData, isLoading } = useSelector(state => state.auth);
+  console.log("user data Login page", userData);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -79,12 +77,15 @@ const Upload = () => {
       medicalHistory,
       vitalSigns,
       chiefComplaint,
-      physicalExamination,
+      physicalExamination, // This will now contain the single field
       diagnosticTests,
       assessmentAndPlan,
-      progressNotes
+       progressNotes: {
+        ...progressNotes,
+        dateOfIssue: currentDate // Set the dateOfIssue to the current date
+      },
+      doctor: userData.response
     };
-
 
     try {
       const response = await axios.post('http://localhost:8080/api/createEMR', { params });
@@ -96,22 +97,18 @@ const Upload = () => {
 
   const [users, setUsers] = useState([]);
 
-const fetchUsers = async () => {
+  const fetchUsers = async () => {
     try {
-        const result = await axios.get('http://localhost:8080/api/getusers');
-        const users = JSON.parse(result.data.response); // Assuming response is already an array of user objects
-console.log(users);
-        // Filter users based on docType and stakeholder
-        const filteredUsers = users.filter(user => 
-            user.Record.docType === "User" 
-        );
-
-        console.log("Filtered users for selection:", filteredUsers);
-        setUsers(filteredUsers); // Set the filtered users in state
+      const result = await axios.get('http://localhost:8080/api/getusers');
+      const users = JSON.parse(result.data.response);
+      console.log(users);
+      const filteredUsers = users.filter(user => user.Record.docType === "User" ); // && stakeholder==='patient'
+      console.log("Filtered users for selection:", filteredUsers);
+      setUsers(filteredUsers);
     } catch (error) {
-        console.error('Error fetching users:', error);
+      console.error('Error fetching users:', error);
     }
-};
+  };
 
   useEffect(() => {
     fetchUsers();
@@ -145,7 +142,7 @@ console.log(users);
                       as="select"
                       value={patientInformation.patientId}
                       onChange={(event) => {
-                        const selectedUser  = users.find(user => user.Record.id === event.target.value);
+                        const selectedUser = users.find(user => user.Record.id === event.target.value);
                         const age = calculateAge(selectedUser.Record.dateOfBirth);
                         setPatientInformation({
                           ...patientInformation,
@@ -344,7 +341,7 @@ console.log(users);
                       value={vitalSigns.bloodPressure}
                       onChange={(event) =>
                         setVitalSigns({
-                          ...vitalSigns ,
+                          ...vitalSigns,
                           bloodPressure: event.target.value
                         })
                       }
@@ -432,83 +429,14 @@ console.log(users);
                 <Form.Label className="font-bold my-4">Physical Examination</Form.Label>
                 <Row>
                   <Col md={6}>
-                    <Form.Label>General Appearance</Form.Label>
+                    <Form.Label>Examination Details</Form.Label>
                     <Form.Control
                       type="text"
-                      value={physicalExamination.generalAppearance}
+                      value={physicalExamination.examinationDetails}
                       onChange={(event) =>
                         setPhysicalExamination({
                           ...physicalExamination,
-                          generalAppearance: event.target.value
-                        })
-                      }
-                    />
-                  </Col>
-                  <Col md={6}>
-                    <Form.Label>Head and Neck</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={physicalExamination.headAndNeck}
-                      onChange={(event) =>
-                        setPhysicalExamination({
-                          ...physicalExamination,
-                          headAndNeck: event.target.value
-                        })
-                      }
-                    />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col md={6}>
-                    <Form.Label>Chest</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={physicalExamination.chest}
-                      onChange={(event) =>
-                        setPhysicalExamination({
-                          ...physicalExamination,
-                          chest: event.target.value
-                        })
-                      }
-                    />
-                  </Col>
-                  <Col md={6}>
-                    <Form.Label>Abdomen</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={physicalExamination.abdomen}
-                      onChange={(event) =>
-                        setPhysicalExamination({
-                          ...physicalExamination,
-                          abdomen: event.target.value
-                        })
-                      }
-                    />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col md={6}>
-                    <Form.Label>Extremities</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={physicalExamination.extremities}
-                      onChange={(event) =>
-                        setPhysicalExamination({
-                          ...physicalExamination,
-                          extremities: event.target.value
-                        })
-                      }
-                    />
-                  </Col>
-                  <Col md={6}>
-                    <Form.Label>Neurological</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={physicalExamination.neurological}
-                      onChange={(event) =>
-                        setPhysicalExamination({
-                          ...physicalExamination,
-                          neurological: event.target.value
+                          examinationDetails: event.target.value
                         })
                       }
                     />
@@ -520,7 +448,7 @@ console.log(users);
                 <Form.Label className="font-bold my-4">Diagnostic Tests</Form.Label>
                 <Row>
                   <Col md={6}>
-                    <Form.Label>Lab Results</Form.Label >
+                    <Form.Label>Lab Results</Form.Label>
                     <Form.Control
                       type="text"
                       value={diagnosticTests.labResults}
@@ -567,7 +495,7 @@ console.log(users);
                   <Col md={6}>
                     <Form.Label>Plan</Form.Label>
                     <Form.Control
-                      type="text"
+ type="text"
                       value={assessmentAndPlan.plan}
                       onChange={(event) =>
                         setAssessmentAndPlan({
@@ -670,7 +598,7 @@ console.log(users);
                 </Row>
               </Form.Group>
 
-              <Button variant="primary" type="submit">
+              <Button className='my-5' variant="primary" type="submit">
                 Create EMR
               </Button>
             </Form>

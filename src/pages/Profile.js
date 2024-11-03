@@ -25,7 +25,7 @@ function Profile() {
             // Optionally, show an error message to the user
         }
     };
-
+// console.log(emrData)
     useEffect(() => {
         getEmr();
     }, []);
@@ -41,8 +41,8 @@ function Profile() {
                             <th className="border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-bold text-gray-900">S.no</th>
                             <th className="border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-bold text-gray-900">Patient Name</th>
                             <th className="border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-bold text-gray-900">Chief Complaint</th>
-                            <th className="border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-bold text-gray-900">Date of Birth</th>
-                            <th className="border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-bold text-gray-900">Vital Signs</th>
+                            <th className="border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-bold text-gray-900">Date</th>
+                            <th className="border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-bold text-gray-900">Doctor</th>
                             <th className="border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-bold text-gray-900"></th>
                         </tr>
                     </thead>
@@ -55,9 +55,10 @@ function Profile() {
                                 <td className="border-b-2 p-4 dark:border-dark-5">{item.Record.patientInformation.dateOfBirth || 'N/A'}</td>
                                 <td className="border-b-2 p-4 dark:border-dark-5">
                                     <div>
-                                        <strong>BP:</strong> {item.Record.vitalSigns.bloodPressure} <br />
-                                        <strong>Pulse:</strong> {item.Record.vitalSigns.pulse} <br />
-                                        <strong>Temp:</strong> {item.Record.vitalSigns.temperature} <br />
+                                        <strong>Dr.</strong> {JSON.parse(item.Record.doctor).name} <br />
+                                        <strong>{JSON.parse(item.Record.doctor).specialization}</strong>  
+                                        
+                                        
                                     </div>
                                 </td>
                                 <td className="border-b-2 p-4 dark:border-dark-5">
