@@ -4,12 +4,13 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Signup from "./pages/Signup";
 import Home from "./pages/Home";
 import Upload from "./pages/Upload";
-import MyData from "./pages/MyData";
+
 import Splash from "./pages/Splash";
 import Profile from "./pages/Profile";
 import { useSelector } from "react-redux";
 import EmrComp from "./pages/EmrComp";
 import AdminPanal from "./pages/AdminPanal";
+import History from "./pages/History";
 
 function App() {
   const { userData, isLoading } = useSelector((state) => state.auth);
@@ -32,11 +33,13 @@ function App() {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/splash" element={<Splash />} />
                 <Route path="/emr" element={<EmrComp />} />
+                <Route path="/history" element={<History />} />
               </>
             ) : (
               <>
                 <Route path="/" element={<Profile />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/history" element={<History />} />
 
                 <Route path="/home" element={<Home />} />
                 <Route path="/splash" element={<Splash />} />
