@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SelectComp from "../components/SelectComp";
 import { v4 as uuidv4 } from 'uuid';
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { signup } from "../redux/features/AuthSlice";
 
 const bg = require('../assets/background-removebg-preview.png');
@@ -11,6 +11,8 @@ function Signup() {
   const navigate = useNavigate();
   const [isRevealPassword, setIsRevealPassword] = useState(false);
   const dispatch = useDispatch();
+  const {userData, isLoading} = useSelector(state => state.auth);
+    console.log("user data Signup page", userData ? userData.response : "No user data");
 
   const togglePassword = () => {
     setIsRevealPassword((prevState) => !prevState);
@@ -82,7 +84,8 @@ const handleSubmit = async (event) => {
     const resultAction = await dispatch(signup(userVal));
     if (signup.fulfilled.match(resultAction)) {
       // Handle successful signup
-      alert("Registration successful!");
+      // alert("Registration successful!");
+      navigate("/");
       
     } else {
       // Handle errors (e.g., user already exists)
@@ -353,11 +356,22 @@ const handleSubmit = async (event) => {
               </div>
             )}
 
-            < button
+           <button
               type="submit"
-              className="w-full px-4 py-2 text-base rounded-xl h-12 font-semibold poppins text-center text-white transition duration-200 ease-in bg-black shadow-md hover:text-black hover:bg-white focus:outline-none focus:ring-2"
+              className={`w-full px-4 py-2 text-base rounded -xl h-12 font-semibold poppins text-center text-white transition duration-200 ease-in ${isLoading ? 'bg-gray-400' : 'bg-black'} shadow-md hover:text-black hover:bg-white focus:outline-none focus:ring-2`}
+              disabled={isLoading} // Disable button while loading
             >
-              <span className="w-full">Submit</span>
+              {isLoading ? (
+                <span className="flex justify-center items-center">
+                  <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                  </svg>
+                  Loading...
+                </span>
+              ) : (
+                <span className="w-full">Submit</span>
+              )}
             </button>
           </form>
           <div className="pt-12 pb-12 text-center">

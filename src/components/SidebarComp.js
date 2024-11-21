@@ -1,7 +1,10 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 const logo = require("../assets/logo-removebg-preview.png");
 function Sidebar() {
+   const {userData, isLoading} = useSelector(state => state.auth);
+  console.log("user data Signup page", userData ? userData.response : "No user data");
   return (
     <>
     
@@ -67,7 +70,8 @@ function Sidebar() {
               </a>
             </li>
 
-            <li>
+           
+ <li>
               <a
                 href="/home"
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
@@ -84,6 +88,8 @@ function Sidebar() {
                 <span className="flex-1 ms-3 whitespace-nowrap">Dashboard</span>
               </a>
             </li>
+{userData.response.stakeholder === "doctor"
+?(
 
             <li>
               <a
@@ -109,6 +115,9 @@ function Sidebar() {
               </a>
             </li>
             
+):null
+
+}
           </ul>
         </div>
       </aside>

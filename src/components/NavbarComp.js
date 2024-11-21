@@ -5,6 +5,7 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { logout } from '../redux/features/AuthSlice';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 const avatar = require('../assets/9434619.jpg');
 
 function Navbar() {
@@ -15,9 +16,12 @@ const user = {
   imageUrl: avatar,
 }
    const dispatch = useDispatch();
+  const navigate = useNavigate();
+
 const handleSignout = () => {
   // Add your signout logic here
 dispatch(logout())
+navigate("/")
   console.log('Signout button clicked');
 };
 

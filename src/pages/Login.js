@@ -11,12 +11,6 @@ function Login() {
    console.log("user data Login page", userData);
 
 
-// useEffect(() => {
-// if(userData){
-//   navigate('/home')
-// }  
-// }, []);
-
 
   const [isRevealPassword, setIsRevealPassword] = useState(false);
 const [email, setEmail] = useState('');
@@ -26,27 +20,26 @@ const [email, setEmail] = useState('');
   const togglePassword = () => {
     setIsRevealPassword((prevState) => !prevState);
   }
+  
    const handleSubmit = async (event) => {
-    const userVal ={
-      email:email,
-      password:password
-    }
-    event.preventDefault();
-  
-  dispatch(login(userVal))
+    event.preventDefault(); // Prevent default form submission
+    const userVal = { email, password };
 
+    
+      const resultAction = await dispatch(login(userVal));
+
+
+    // Check if login was successful
+    if (login.fulfilled.match(resultAction)) {
+      // Navigate to home or desired route on success
+      navigate('/home');
+    } else {
+      // Show an alert for error
+      alert('Login failed. Please check your credentials and try again.');
+    }
   
-    //  await axios.post('http://localhost:8080/api/login', userVal)
-    // .then(response => {
-    //   console.log(response);
-    //   // Handle successful registration
-    // })
-    // .catch(error => {
-    //   console.error(error);
-    //   // Handle registration error
-    //   alert("login failed. Please try again.");
-    // });
-  }
+  };
+
 
 
   return (
@@ -164,9 +157,20 @@ const [email, setEmail] = useState('');
             </div>
             <button
               type="submit"
-              className="w-full px-4 py-2 text-base rounded-xl h-12 font-semibold poppins text-center text-white transition duration-200 ease-in bg-black shadow-md hover:text-black hover:bg-white focus:outline-none focus:ring-2"
+              className={`w-full px-4 py-2 text-base rounded-xl h-12 font-semibold poppins text-center text-white transition duration-200 ease-in ${isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-black hover:text-black hover:bg-white'} focus:outline-none focus:ring-2`}
+              disabled={isLoading} // Disable button when loading
             >
-              <span className="w-full">Submit</span>
+              {isLoading ? (
+                <span className="flex justify-center">
+                  <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                  </svg>
+                  Loading...
+                </span>
+              ) : (
+                <span className="w-full">Submit</span>
+              )}
             </button>
           </form>
           <div className="pt-12 pb-12 text-center">

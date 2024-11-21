@@ -88,7 +88,7 @@ const Upload = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost:8080/api/createEMR', { params });
+      const response = await axios.post('http://localhost:5000/api/createEMR', { params });
       console.log('EMR created successfully:', response.data);
     } catch (error) {
       console.error('Error creating EMR:', error);
@@ -99,10 +99,10 @@ const Upload = () => {
 
   const fetchUsers = async () => {
     try {
-      const result = await axios.get('http://localhost:8080/api/getusers');
+      const result = await axios.get('http://localhost:5000/api/getusers');
       const users = JSON.parse(result.data.response);
       console.log(users);
-      const filteredUsers = users.filter(user => user.Record.docType === "User" ); // && stakeholder==='patient'
+      const filteredUsers = users.filter(user => user.Record.docType === "User" && user.Record.stakeholder==='patient' ); // && stakeholder==='patient'
       console.log("Filtered users for selection:", filteredUsers);
       setUsers(filteredUsers);
     } catch (error) {

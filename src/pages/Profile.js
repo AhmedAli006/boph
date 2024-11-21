@@ -13,7 +13,7 @@ function Profile() {
     const getEmr = async () => {
         try {
             // Send data to the API
-            const response = await axios.get('http://localhost:8080/api/getallemr');
+            const response = await axios.get('http://localhost:5000/api/getallemr');
             console.log('EMR data retrieved:', response.data.response);
 
             // Filter EMR data based on the logged-in user

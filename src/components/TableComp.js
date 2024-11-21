@@ -1,95 +1,52 @@
-import React from "react";
-import DashCards from "./DashCards";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 function Table() {
-  const data =[
-  {
-    "patientId": 1,
-    "name": "John Doe",
-    "EMR": "123456789",
-    "dateTime": "2022-01-01 10:00:00",
-    "status": "Active"
-  },
-  {
-    "patientId": 2,
-    "name": "Jane Smith",
-    "EMR": "987654321",
-    "dateTime": "2022-01-05 14:30:00",
-    "status": "Inactive"
-  },
-  {
-    "patientId": 3,
-    "name": "Bob Johnson",
-    "EMR": "111111111",
-    "dateTime": "2022-01-10 08:00:00",
-    "status": "Active"
-  },
-  {
-    "patientId": 4,
-    "name": "Alice Brown",
-    "EMR": "222222222",
-    "dateTime": "2022-01-12 12:00:00",
-    "status": "Inactive"
-  },
-  {
-    "patientId": 5,
-    "name": "Mike Davis",
-    "EMR": "333333333",
-    "dateTime": "2022-01-15 16:00:00",
-    "status": "Active"
-  },
-  {
-    "patientId": 6,
-    "name": "Emily Taylor",
-    "EMR": "444444444",
-    "dateTime": "2022-01-18 10:30:00",
-    "status": "Inactive"
-  },
-  {
-    "patientId": 7,
-    "name": "Sarah Lee",
-    "EMR": "555555555",
-    "dateTime": "2022-01-20 14:00:00",
-    "status": "Active"
-  },
-  {
-    "patientId": 8,
-    "name": "Kevin White",
-    "EMR": "666666666",
-    "dateTime": "2022-01-22 12:30:00",
-    "status": "Inactive"
-  },
-  {
-    "patientId": 9,
-    "name": "Lisa Nguyen",
-    "EMR": "777777777",
-    "dateTime": "2022-01-25 16:30:00",
-    "status": "Active"
-  },
-  {
-    "patientId": 10,
-    "name": "David Kim",
-    "EMR": "888888888",
-    "dateTime": "2022-01-28 10:00:00",
-    "status": "Inactive"
-  }
-]
-  return (
- <>
-      <div className="max-w-5xl px-2 mx-auto sm:px-8">
-        {/* <DashCards /> */}
+  const [patients, setPatients] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
 
-        <div className="flex flex-row items-center  justify-center w-full p-2  shadow-xs">
-          <div className="hidden ml-8 text-lg text-black md:flex"></div>
-          <span style={{ width: "460px" }} className="flex h-10 text-sm  rounded-full cursor-pointer ">
+  const fetchUsers = async () => {
+    try {
+      const result = await axios.get('http://localhost:5000/api/getusers');
+      const users = JSON.parse(result.data.response);
+      console.log(users);
+      const filteredPatients = users.filter(user => user.Record.docType === "User");
+      console.log("Filtered patients for selection:", filteredPatients);
+      setPatients(filteredPatients);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  // Filter patients based on search query
+  const filteredPatients = patients.filter(patient => {
+    const { name, email, phone } = patient.Record;
+    return (
+      name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      phone.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
+
+  return (
+    <>
+      <div className="max-w-5xl px-2 mx-auto sm:px-8">
+        <div className="flex flex-row items-center justify-center w-full p-2 shadow-xs">
+          <span style={{ width: "460px" }} className="flex h-10 text-sm rounded-full cursor-pointer ">
             <input
               type="search"
-              name="serch"
-              placeholder="Search"
-              className="flex-grow  px-4 text-sm rounded-l-full border border-gray-500 rounded-r-full focus:outline-none"
+              name="search"
+              placeholder="Search by name, email, or phone"
+              className="flex-grow px-4 text-sm rounded-l-full border border-gray-500 rounded-r-full focus:outline-none"
+              value={searchQuery} // Bind the input value to searchQuery
+              onChange={(e) => setSearchQuery(e.target.value)} // Update searchQuery on input change
             />
           </span>
-          <div className="flex flex-row-reverse ml-4 mr-4  ">
+          <div className="flex flex-row-reverse ml-4 mr-4">
             <button>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -109,10 +66,10 @@ function Table() {
           </div>
         </div>
 
-        <div className="items-center w-full min-h-screen inline-block  ">
-          <div className="w-full  px-5 mx-auto lg:container ">
-            <div className="max-w-screen-lg mx-auto ">
-              <div className="min-w-full my-4 overflow-x-auto border rounded-md shadow-sm dark:border-gray-700">
+        <div className="items-center w-full min-h-screen inline-block">
+          <div className="w-full px-5 mx-auto lg:container">
+            <div className="mx-auto">
+              <div className="w-full my-4 overflow-x-auto border rounded-md shadow-sm dark:border-gray-700">
                 <table className="min-w-full bg-white rounded whitespace-nowrap">
                   <thead className="border-b bg-gray-50">
                     <tr>
@@ -123,39 +80,33 @@ function Table() {
                         Name
                       </th>
                       <th className="px-3 py-3 text-xs font-normal text-left text-gray-500 uppercase align-middle">
-                        EMR
+                        Email
                       </th>
                       <th className="px-3 py-3 text-xs font-normal text-left text-gray-500 uppercase align-middle">
-                        Date and Time
+                        Phone
                       </th>
                       <th className="px-3 py-3 text-xs font-normal text-left text-gray-500 uppercase align-middle">
-                        Status
+                        Sex
                       </th>
-                     
+                      <th className="px-3 py-3 text-xs font-normal text-left text-gray-500 uppercase align-middle">
+                        Actions
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="text-sm bg-white divide-y divide-gray-200">
-                    {data.map((item, index) => (
+                    {filteredPatients.map((patient, index) => (
                       <tr key={index}>
-                        <td className="px-3 py-4 text-gray-600">{item.patientId}</td>
-                        <td className="px-3 py-4">{item.name}</td>
-                        <td className="px-3 py-4">{item.EMR}</td>
-                        <td className="px-3 py-4">{item.dateTime}</td>
-                        <td className="px-3 py-4">
-                          <span
-                            className={`px-4 py-1 text-sm rounded-full ${
-                              item.status === "Active" ? "bg-green-50 text-green-500" : "bg-red-50 text-red-500"
-                            }`}
-                          >
-                            {item.status}
-                          </span>
-                        </td>
+                        <td className="px-3 py-4 text-gray-600">{patient.Record.id}</td>
+                        <td className="px-3 py-4">{patient.Record.name}</td>
+                        <td className="px-3 py-4">{patient.Record.email}</td>
+                        <td className="px-3 py-4">{patient.Record.phone}</td>
+                        <td className="px-3 py-4">{patient.Record.sex}</td>
                         <td className="px-3 py-4">
                           <button
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                            onClick={() => console.log(`Button clicked for patient ${item.patientId}`)}
+                            onClick={() => console.log(`Button clicked for patient ${patient.Record.id}`)}
                           >
-                            View 
+                            View
                           </button>
                         </td>
                       </tr>
