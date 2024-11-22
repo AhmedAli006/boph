@@ -32,18 +32,18 @@ function App() {
                 <Route path="/upload" element={<Upload />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/splash" element={<Splash />} />
-                <Route path="/emr" element={<EmrComp />} />
-                <Route path="/history" element={<History />} />
+                <Route path="/emr/:id" element={<EmrComp />} />
+                <Route path="/history/:id" element={<History />} />
               </>
             ) : (
               <>
                 <Route path="/" element={<Profile />} />
                 <Route path="/profile" element={<Profile />} />
-                <Route path="/history" element={<History />} />
+                <Route path="/history/:id" element={<History />} />
 
                 <Route path="/home" element={<Home />} />
                 <Route path="/splash" element={<Splash />} />
-                <Route path="/emr" element={<EmrComp />} />
+                <Route path="/emr/:id" element={<EmrComp />} />
               </>
             )}
           </>

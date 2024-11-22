@@ -8,6 +8,9 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 
 const Upload = () => {
+  const [loading, setLoading] = useState(false);
+const [successMessage, setSuccessMessage] = useState('');
+const [errorMessage, setErrorMessage] = useState('');
   const [patientInformation, setPatientInformation] = useState({
     patientId: '',
     name: '',
@@ -69,31 +72,43 @@ const Upload = () => {
   console.log("user data Login page", userData);
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    const id = uuidv4();
-    const params = {
-      id,
-      patientInformation,
-      medicalHistory,
-      vitalSigns,
-      chiefComplaint,
-      physicalExamination, // This will now contain the single field
-      diagnosticTests,
-      assessmentAndPlan,
-       progressNotes: {
-        ...progressNotes,
-        dateOfIssue: currentDate // Set the dateOfIssue to the current date
-      },
-      doctor: userData.response
-    };
+  event.preventDefault();
+  setLoading(true); // Start loading
+  setSuccessMessage(''); // Reset messages
+  setErrorMessage('');
 
-    try {
-      const response = await axios.post('http://localhost:5000/api/createEMR', { params });
-      console.log('EMR created successfully:', response.data);
-    } catch (error) {
-      console.error('Error creating EMR:', error);
-    }
+  const id = uuidv4();
+  const params = {
+    id,
+    patientInformation,
+    medicalHistory,
+    vitalSigns,
+    chiefComplaint,
+    physicalExamination,
+    diagnosticTests,
+    assessmentAndPlan,
+    progressNotes: {
+      ...progressNotes,
+      dateOfIssue: currentDate
+    },
+    doctor: userData.response
   };
+
+  try {
+    const response = await axios.post('http://localhost:5000/api/createEMR', { params });
+    console.log('EMR created successfully:', response.data);
+    setSuccessMessage('EMR created successfully!'); // Set success message
+  } catch (error) {
+    console.error('Error creating EMR:', error);
+    setErrorMessage('Error creating EMR. Please try again.'); // Set error message
+  } finally {
+    setLoading(false); // Stop loading
+    setTimeout(() => {
+      setSuccessMessage('');
+      setErrorMessage('');
+    }, 3000); // Clear messages after 3 seconds
+  }
+};
 
   const [users, setUsers] = useState([]);
 
@@ -604,9 +619,13 @@ const Upload = () => {
             </Form>
           </Col>
         </Row>
+        {loading && <div className="loader">Loading...</div>} {/* Loader */}
+{successMessage && <div className="alert alert-success">{successMessage}</div>} {/* Success message */}
+{errorMessage && <div className="alert alert-danger">{errorMessage}</div>} {/* Error message */}
       </Container>
     </>
   );
 };
+
 
 export default Upload;

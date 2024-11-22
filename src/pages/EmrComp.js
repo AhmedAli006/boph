@@ -1,35 +1,55 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 function EmrComp() {
   const location = useLocation();
   const emrData = location.state; // Access the passed EMR data
-  console.log(emrData);
+  const { id } = useParams();
+  
+  // Debugging: Log the emrData to see its structure
+  console.log('EMR Data:', emrData);
+  console.log('ID:', id);
 
+  // Check if emrData is defined
   if (!emrData) {
     return <div>No EMR data available.</div>; // Handle case where no data is passed
   }
+
+  // Parse the JSON strings into objects
+  const parsedData = {
+    patientInformation: JSON.parse(emrData.patientInformation),
+    medicalHistory: JSON.parse(emrData.medicalHistory),
+    vitalSigns: JSON.parse(emrData.vitalSigns),
+    chiefComplaint: JSON.parse(emrData.chiefComplaint),
+    physicalExamination: JSON.parse(emrData.physicalExamination),
+    diagnosticTests: JSON.parse(emrData.diagnosticTests),
+    assessmentAndPlan: JSON.parse(emrData.assessmentAndPlan),
+    progressNotes: JSON.parse(emrData.progressNotes),
+    doctor: JSON.parse(emrData.doctor),
+  };
+
+  console.log('Parsed Data:', parsedData);
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-4xl font-bold text-center mb-6 text-blue-600">Medical Report</h1>
 
       {/* Patient Information */}
-      <Section title="Patient Information" data={emrData.Record.patientInformation} />
+      <Section title="Patient Information" data={parsedData.patientInformation} />
       {/* Medical History */}
-      <Section title="Medical History" data={emrData.Record.medicalHistory} />
+      <Section title="Medical History" data={parsedData.medicalHistory} />
       {/* Vital Signs */}
-      <Section title="Vital Signs" data={emrData.Record.vitalSigns} />
+      <Section title="Vital Signs" data={parsedData.vitalSigns} />
       {/* Chief Complaint */}
-      <Section title="Chief Complaint" data={emrData.Record.chiefComplaint} />
+      <Section title="Chief Complaint" data={parsedData.chiefComplaint} />
       {/* Physical Examination */}
-      <Section title="Physical Examination" data={emrData.Record.physicalExamination} />
+      <Section title="Physical Examination" data={parsedData.physicalExamination} />
       {/* Diagnostic Tests */}
-      <Section title="Diagnostic Tests" data={emrData.Record.diagnosticTests} />
+      <Section title="Diagnostic Tests" data={parsedData.diagnosticTests} />
       {/* Assessment and Plan */}
-      <Section title="Assessment and Plan" data={emrData.Record.assessmentAndPlan} />
+      <Section title="Assessment and Plan" data={parsedData.assessmentAndPlan} />
       {/* Progress Notes */}
-      <Section title="Progress Notes" data={emrData.Record.progressNotes} />
+      <Section title="Progress Notes" data={parsedData.progressNotes} />
     </div>
   );
 }
