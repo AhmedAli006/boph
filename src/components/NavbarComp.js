@@ -4,11 +4,13 @@ import React,{ Fragment }  from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { logout } from '../redux/features/AuthSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 const avatar = require('../assets/9434619.jpg');
-
+const logo = require("../assets/logo-removebg-preview.png");
 function Navbar() {
+ const { userData, isLoading } = useSelector((state) => state.auth);
+  console.log("user data Main App ", userData);
 
 const user = {
   name: 'Tom Cook',
@@ -26,10 +28,18 @@ navigate("/")
 };
 
 const userNavigation = [
-  { name: 'Your Profile', href: '/profile' },
-  // { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#',onclick:() => handleSignout()},
-]
+  ...(userData.response.stakeholder === "doctor"
+    ? [
+        { name: 'Dashboard', href: '/home' },
+        // { name: 'Settings', href: '#' },
+        { name: 'Sign out', href: '#', onclick: () => handleSignout() },
+      ]
+    : [
+        { name: 'Your Profile', href: '/profile' },
+        // { name: 'Settings', href: '#' },
+        { name: 'Sign out', href: '#', onclick: () => handleSignout() },
+      ]),
+];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -44,16 +54,19 @@ function classNames(...classes) {
           {({ open }) => (
             <>
               <div  className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="flex h-16 items-center justify-between">
+                 <div className="flex h-16 items-center justify-between">
                   <div className="flex items-center">
-
-<h1 style={{marginLeft: '560px',fontWeight:'700', fontSize:'50px',fontFamily:'meshed'}} className='text-white mt-3'>BOPH</h1>
-                    
+                    {/* Logo Image on the left */}
+                    <img src={logo} onClick={()=>{navigate("/")}} alt="Logo" style={{width:50,height:50,padding:2}} className=" mr-3 bg-white rounded-full" /> {/* Adjust size as needed */}
                   </div>
+                  <div className="flex items-center">
+                    
+                   
+                    <h1 style={{ fontWeight: '700', fontSize: '50px', fontFamily: 'meshed',marginTop:20 }} className='text-white'>BOPH</h1>
+                  </div>
+
                   <div className="hidden md:block">
                     <div className="ml-4 flex items-center md:ml-6">
-                   
-
                       {/* Profile dropdown */}
                       <Menu as="div" className="relative ml-3">
                         <div>
@@ -63,6 +76,7 @@ function classNames(...classes) {
                             <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" />
                           </Menu.Button>
                         </div>
+
                         <Transition
                           as={Fragment}
                           enter="transition ease-out duration-100"

@@ -75,22 +75,22 @@ function Table() {
                 <table className="min-w-full bg-white rounded whitespace-nowrap">
                   <thead className="border-b bg-gray-50">
                     <tr>
-                      <th className="px-3 py-3 text-xs font-normal text-left text-gray-500 uppercase align-middle">
+                      <th className="px-3 py-3 text-xs font-bold text-left text-gray-500 uppercase align-middle">
                         Patient ID
                       </th>
-                      <th className="px-3 py-3 text-xs font-normal text-left text-gray-500 uppercase align-middle">
+                      <th className="px-3 py-3 text-xs font-bold text-left text-gray-500 uppercase align-middle">
                         Name
                       </th>
-                      <th className="px-3 py-3 text-xs font-normal text-left text-gray-500 uppercase align-middle">
+                      <th className="px-3 py-3 text-xs font-bold text-left text-gray-500 uppercase align-middle">
                         Email
                       </th>
-                      <th className="px-3 py-3 text-xs font-normal text-left text-gray-500 uppercase align-middle">
+                      <th className="px-3 py-3 text-xs font-bold text-left text-gray-500 uppercase align-middle">
                         Phone
                       </th>
-                      <th className="px-3 py-3 text-xs font-normal text-left text-gray-500 uppercase align-middle">
+                      <th className="px-3 py-3 text-xs font-bold text-left text-gray-500 uppercase align-middle">
                         Sex
                       </th>
-                      <th className="px-3 py-3 text-xs font-normal text-left text-gray-500 uppercase align-middle">
+                      <th className="px-3 py-3 text-xs font-bold text-left text-gray-500 uppercase align-middle">
                         History
                       </th>
                     </tr>
@@ -98,7 +98,7 @@ function Table() {
                   <tbody className="text-sm bg-white divide-y divide-gray-200">
                     {filteredPatients.map((patient, index) => (
                       <tr key={index}>
-                        <td className="px-3 py-4 text-gray-600">{patient.Record.id}</td>
+                        <td className="px-3 py-4 text-gray-600">{patient.Record.id.slice(0, 8)}...</td>
                         <td className="px-3 py-4">{patient.Record.name}</td>
                         <td className="px-3 py-4">{patient.Record.email}</td>
                         <td className="px-3 py-4">{patient.Record.phone}</td>

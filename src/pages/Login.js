@@ -32,7 +32,7 @@ const [email, setEmail] = useState('');
     // Check if login was successful
     if (login.fulfilled.match(resultAction)) {
       // Navigate to home or desired route on success
-      navigate('/home');
+      navigate('/');
     } else {
       // Show an alert for error
       alert('Login failed. Please check your credentials and try again.');

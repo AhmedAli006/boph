@@ -9,7 +9,7 @@ function Home() {
 
 
 
-    <Sidebar/>
+    {/* <Sidebar/> */}
 <NavbarComp/>
    
  <Table/>

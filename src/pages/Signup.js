@@ -76,7 +76,7 @@ const handleSubmit = async (event) => {
     stakeholder: stakeholder,
     dateOfBirth: stakeholder === "patient" ? dateOfBirth : "",
     sex: stakeholder === "patient" ? sex : "",
-    phone: stakeholder === "patient" ? phone : "",
+    phone: phone ,
     specialization: stakeholder === "doctor" ? specialization : "",
   };
 
@@ -317,7 +317,9 @@ const handleSubmit = async (event) => {
                   </div>
                 </div>
                
-                <div className="flex flex-col pt-4 pb-5">
+              </div>
+            )}
+                <div className="flex flex-col  pb-4">
                   <div className="flex relative ">
                     <span className="  absolute inline-flex  items-center px-3 py-2.5 text-gray-500  text-sm">
                       {/* Phone Icon */}
@@ -334,8 +336,6 @@ const handleSubmit = async (event) => {
                     />
                   </div>
                 </div>
-              </div>
-            )}
  {/* Specialization Input */}
             {stakeholder === "doctor" && (
               <div className="flex flex-col   pb-5">

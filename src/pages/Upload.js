@@ -1,7 +1,7 @@
 import Sidebar from '../components/SidebarComp';
 import NavbarComp from '../components/NavbarComp';
 import React, { useEffect, useState } from 'react';
-import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
@@ -142,9 +142,19 @@ const [errorMessage, setErrorMessage] = useState('');
 
   return (
     <>
-      <Sidebar />
+      {/* <Sidebar /> */}
       <NavbarComp />
       <Container style={{ width: 950 }}>
+                {successMessage && (
+          <Alert variant="success" style={{ position: 'fixed', top: 20, left: '50%', transform: 'translateX(-50%)', zIndex: 1050 }}>
+            {successMessage}
+          </Alert>
+        )}
+        {errorMessage && (
+          <Alert variant="danger" style={{ position: 'fixed', top: 20, left: '50%', transform: 'translateX(-50%)', zIndex: 1050 }}>
+            {errorMessage}
+          </Alert>
+        )}
         <Row>
           <Col md={12}>
             <h2>Create EMR</h2>
@@ -613,15 +623,23 @@ const [errorMessage, setErrorMessage] = useState('');
                 </Row>
               </Form.Group>
 
-              <Button className='my-5' variant="primary" type="submit">
-                Create EMR
-              </Button>
+             <Button className='my-5' variant="primary" type="submit" disabled={loading}>
+  {loading ? (
+    <span className="flex justify-center">
+      <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+      </svg>
+      Loading...
+    </span>
+  ) : (
+    <span className="w-full">Create EMR</span>
+  )}
+</Button>
             </Form>
           </Col>
         </Row>
-        {loading && <div className="loader">Loading...</div>} {/* Loader */}
-{successMessage && <div className="alert alert-success">{successMessage}</div>} {/* Success message */}
-{errorMessage && <div className="alert alert-danger">{errorMessage}</div>} {/* Error message */}
+
       </Container>
     </>
   );

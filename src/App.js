@@ -41,9 +41,10 @@ function App() {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/history/:id" element={<History />} />
 
-                <Route path="/home" element={<Home />} />
+                {/* <Route path="/home" element={<Home />} /> */}
                 <Route path="/splash" element={<Splash />} />
                 <Route path="/emr/:id" element={<EmrComp />} />
+                <Route path="/emr" element={<EmrComp />} />
               </>
             )}
           </>
