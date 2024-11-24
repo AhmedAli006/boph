@@ -66,6 +66,10 @@ const handleSubmit = async (event) => {
     alert("Please enter your specialization.");
     return;
   }
+  if (stakeholder === "doctor" && !phone) {
+    alert("Please enter your phone.");
+    return;
+  }
 
   const newUser  = uuidv4();
   const userVal = {
@@ -319,7 +323,7 @@ const handleSubmit = async (event) => {
                
               </div>
             )}
-                <div className="flex flex-col  pb-4">
+                <div className="flex flex-col mt-4  pb-4">
                   <div className="flex relative ">
                     <span className="  absolute inline-flex  items-center px-3 py-2.5 text-gray-500  text-sm">
                       {/* Phone Icon */}

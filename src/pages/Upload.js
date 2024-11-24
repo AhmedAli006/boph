@@ -6,20 +6,28 @@ import { v4 as uuidv4 } from 'uuid';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { useLocation, useParams } from 'react-router-dom';
 
 const Upload = () => {
+  const { id } = useParams();
+  const location = useLocation();
+  const patientData = location.state; // Get patient data from location state
+  console.log(id, patientData);
+
   const [loading, setLoading] = useState(false);
-const [successMessage, setSuccessMessage] = useState('');
-const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  
+  // Set initial patient information from patientData
   const [patientInformation, setPatientInformation] = useState({
-    patientId: '',
-    name: '',
-    dateOfBirth: '',
-    age: '',
-    sex: '',
-    address: '',
-    phoneNumber: '',
-    email: ''
+    patientId: patientData.patientId,
+    name: patientData.name,
+    dateOfBirth: patientData.dateOfBirth,
+    age: patientData.age,
+    sex: patientData.sex,
+    address: patientData.address,
+    phoneNumber: patientData.phoneNumber,
+    email: patientData.email
   });
 
   const [medicalHistory, setMedicalHistory] = useState({
@@ -43,9 +51,8 @@ const [errorMessage, setErrorMessage] = useState('');
     reviewOfSystems: ''
   });
 
-  // Updated physicalExamination state to have a single field
   const [physicalExamination, setPhysicalExamination] = useState({
-    examinationDetails: '' // Single field for physical examination
+    examinationDetails: ''
   });
 
   const [diagnosticTests, setDiagnosticTests] = useState({
@@ -67,77 +74,48 @@ const [errorMessage, setErrorMessage] = useState('');
     note: '',
     dateOfIssue: ''
   });
- const currentDate = new Date().toISOString().split('T')[0];
+
+  const currentDate = new Date().toISOString().split('T')[0];
   const { userData, isLoading } = useSelector(state => state.auth);
   console.log("user data Login page", userData);
 
   const handleSubmit = async (event) => {
-  event.preventDefault();
-  setLoading(true); // Start loading
-  setSuccessMessage(''); // Reset messages
-  setErrorMessage('');
+    event.preventDefault();
+    setLoading(true); // Start loading
+    setSuccessMessage(''); // Reset messages
+    setErrorMessage('');
 
-  const id = uuidv4();
-  const params = {
-    id,
-    patientInformation,
-    medicalHistory,
-    vitalSigns,
-    chiefComplaint,
-    physicalExamination,
-    diagnosticTests,
-    assessmentAndPlan,
-    progressNotes: {
-      ...progressNotes,
-      dateOfIssue: currentDate
-    },
-    doctor: userData.response
-  };
+    const id = uuidv4();
+    const params = {
+      id,
+      patientInformation,
+      medicalHistory,
+      vitalSigns,
+      chiefComplaint,
+      physicalExamination,
+      diagnosticTests,
+      assessmentAndPlan,
+      progressNotes: {
+        ...progressNotes,
+        dateOfIssue: currentDate
+      },
+      doctor: userData.response
+    };
 
-  try {
-    const response = await axios.post('http://localhost:5000/api/createEMR', { params });
-    console.log('EMR created successfully:', response.data);
-    setSuccessMessage('EMR created successfully!'); // Set success message
-  } catch (error) {
-    console.error('Error creating EMR:', error);
-    setErrorMessage('Error creating EMR. Please try again.'); // Set error message
-  } finally {
-    setLoading(false); // Stop loading
-    setTimeout(() => {
-      setSuccessMessage('');
-      setErrorMessage('');
-    }, 3000); // Clear messages after 3 seconds
-  }
-};
-
-  const [users, setUsers] = useState([]);
-
-  const fetchUsers = async () => {
     try {
-      const result = await axios.get('http://localhost:5000/api/getusers');
-      const users = JSON.parse(result.data.response);
-      console.log(users);
-      const filteredUsers = users.filter(user => user.Record.docType === "User" && user.Record.stakeholder==='patient' ); // && stakeholder==='patient'
-      console.log("Filtered users for selection:", filteredUsers);
-      setUsers(filteredUsers);
+      const response = await axios.post('http://localhost:5000/api/createEMR', { params });
+      console.log('EMR created successfully:', response.data);
+      setSuccessMessage('EMR created successfully!'); // Set success message
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error('Error creating EMR:', error);
+      setErrorMessage('Error creating EMR. Please try again.'); // Set error message
+    } finally {
+      setLoading(false); // Stop loading
+      setTimeout(() => {
+        setSuccessMessage('');
+        setErrorMessage('');
+      }, 3000); // Clear messages after 3 seconds
     }
-  };
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  const calculateAge = (dateOfBirth) => {
-    const birthDate = new Date(dateOfBirth);
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDifference = today.getMonth() - birthDate.getMonth();
-    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-    return age;
   };
 
   return (
@@ -145,7 +123,7 @@ const [errorMessage, setErrorMessage] = useState('');
       {/* <Sidebar /> */}
       <NavbarComp />
       <Container style={{ width: 950 }}>
-                {successMessage && (
+        {successMessage && (
           <Alert variant="success" style={{ position: 'fixed', top: 20, left: '50%', transform: 'translateX(-50%)', zIndex: 1050 }}>
             {successMessage}
           </Alert>
@@ -163,32 +141,20 @@ const [errorMessage, setErrorMessage] = useState('');
                 <Form.Label className="font-bold my-4">Patient Information</Form.Label>
                 <Row>
                   <Col md={6}>
+                    <Form.Label>Patient ID</Form.Label>
                     <Form.Control
-                      as="select"
+                      type="text"
                       value={patientInformation.patientId}
-                      onChange={(event) => {
-                        const selectedUser = users.find(user => user.Record.id === event.target.value);
-                        const age = calculateAge(selectedUser.Record.dateOfBirth);
-                        setPatientInformation({
-                          ...patientInformation,
-                          patientId: selectedUser.Record.id,
-                          name: selectedUser.Record.name,
-                          age: age,
-                          dateOfBirth: selectedUser.Record.dateOfBirth,
-                          sex: selectedUser.Record.sex,
-                          address: selectedUser.Record.address,
-                          phoneNumber: selectedUser.Record.phone,
-                          email: selectedUser.Record.email
-                        });
-                      }}
-                    >
-                      <option value="">Select a patient</option>
-                      {users.map(user => (
-                        <option key={user.Record.id} value={user.Record.id}>
-                          {user.Record.name}
-                        </option>
-                      ))}
-                    </Form.Control>
+                      readOnly
+                    />
+                  </Col>
+                  <Col md={6}>
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={patientInformation.name}
+                      readOnly
+                    />
                   </Col>
                 </Row>
                 <Row>
@@ -197,30 +163,16 @@ const [errorMessage, setErrorMessage] = useState('');
                     <Form.Control
                       type="date"
                       value={patientInformation.dateOfBirth}
-                      onChange={(event) =>
-                        setPatientInformation({
-                          ...patientInformation,
-                          dateOfBirth: event.target.value
-                        })
-                      }
+                      readOnly
                     />
                   </Col>
                   <Col md={6}>
                     <Form.Label>Sex</Form.Label>
                     <Form.Control
-                      as="select"
+                      type="text"
                       value={patientInformation.sex}
-                      onChange={(event) =>
-                        setPatientInformation({
-                          ...patientInformation,
-                          sex: event.target.value
-                        })
-                      }
-                    >
-                      <option value="">Select sex</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                    </Form.Control>
+                      readOnly
+                    />
                   </Col>
                 </Row>
                 <Row>
@@ -229,12 +181,7 @@ const [errorMessage, setErrorMessage] = useState('');
                     <Form.Control
                       type="text"
                       value={patientInformation.address}
-                      onChange={(event) =>
-                        setPatientInformation({
-                          ...patientInformation,
-                          address: event.target.value
-                        })
-                      }
+                      readOnly
                     />
                   </Col>
                   <Col md={6}>
@@ -242,12 +189,7 @@ const [errorMessage, setErrorMessage] = useState('');
                     <Form.Control
                       type="text"
                       value={patientInformation.phoneNumber}
-                      onChange={(event) =>
-                        setPatientInformation({
-                          ...patientInformation,
-                          phoneNumber: event.target.value
-                        })
-                      }
+                      readOnly
                     />
                   </Col>
                 </Row>
@@ -257,12 +199,7 @@ const [errorMessage, setErrorMessage] = useState('');
                     <Form.Control
                       type="email"
                       value={patientInformation.email}
-                      onChange={(event) =>
-                        setPatientInformation({
-                          ...patientInformation,
-                          email: event.target.value
-                        })
-                      }
+                      readOnly
                     />
                   </Col>
                 </Row>
@@ -357,7 +294,7 @@ const [errorMessage, setErrorMessage] = useState('');
                           temperature: event.target.value
                         })
                       }
-                    />
+ />
                   </Col>
                   <Col md={6}>
                     <Form.Label>Blood Pressure</Form.Label>
@@ -520,15 +457,14 @@ const [errorMessage, setErrorMessage] = useState('');
                   <Col md={6}>
                     <Form.Label>Plan</Form.Label>
                     <Form.Control
- type="text"
+                      type="text"
                       value={assessmentAndPlan.plan}
                       onChange={(event) =>
                         setAssessmentAndPlan({
                           ...assessmentAndPlan,
                           plan: event.target.value
-                        })
-                      }
-                    />
+                        })}
+                      />
                   </Col>
                 </Row>
                 <Row>
@@ -623,27 +559,25 @@ const [errorMessage, setErrorMessage] = useState('');
                 </Row>
               </Form.Group>
 
-             <Button className='my-5' variant="primary" type="submit" disabled={loading}>
-  {loading ? (
-    <span className="flex justify-center">
-      <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
-        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-      </svg>
-      Loading...
-    </span>
-  ) : (
-    <span className="w-full">Create EMR</span>
-  )}
-</Button>
+              <Button className='my-5' variant="primary" type="submit" disabled={loading}>
+                {loading ? (
+                  <span className="flex justify-center">
+                    <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                    </svg>
+                    Loading...
+                  </span>
+                ) : (
+                  <span className="w-full">Create EMR</span>
+                )}
+              </Button>
             </Form>
           </Col>
         </Row>
-
       </Container>
     </>
   );
 };
-
 
 export default Upload;

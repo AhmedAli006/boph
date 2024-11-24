@@ -35,7 +35,7 @@ function Profile() {
             <NavbarComp />
             {/* <Sidebar /> */}
             <div  className='flex justify-center'>
-                <table className="table p-4 bg-white rounded-lg shadow m-10 border-2">
+                <table className="table  bg-white rounded-lg shadow m-10 border-2">
                     <thead>
                         <tr>
                             <th className="border-b-2 p-4 dark:border-dark-5 whitespace-nowrap font-bold text-gray-900">S.no</th>
@@ -64,7 +64,7 @@ function Profile() {
                                 <td className="border-b-2 p-4 dark:border-dark-5">
                                     <div className="flex place-content-center">
                                         <button 
-                                            className="text-blue- 500 hover:underline" 
+                                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" 
                                             onClick={() => navigate(`/emr/${item.Record.id}`, { state: item })} 
                                         >Open Report</button>
                                     </div>

@@ -9,23 +9,56 @@ function EmrComp() {
 
   console.log("EMR data", emrData);
 
-  // Check if emrData is defined
-  if (!emrData) {
-    return <div className="text-center text-red-600 font-bold">No EMR data available.</div>; // Handle case where no data is passed
+  let parsedData = {};
+
+  // Check if emrData is defined and has a Record property
+  if (emrData && emrData.Record) {
+    parsedData = {
+      patientInformation: emrData.Record.patientInformation || {},
+      medicalHistory: emrData.Record.medicalHistory || {},
+      vitalSigns: emrData.Record.vitalSigns || {},
+      chiefComplaint: emrData.Record.chiefComplaint || {},
+      physicalExamination: emrData.Record.physicalExamination || {},
+      diagnosticTests: emrData.Record.diagnosticTests || {},
+      assessmentAndPlan: emrData.Record.assessmentAndPlan || {},
+      progressNotes: emrData.Record.progressNotes || {},
+      doctor: emrData.Record.doctor ? JSON.parse(emrData.Record.doctor) : {},
+    };
+  } else if (emrData) {
+    parsedData = {
+      patientInformation: emrData.patientInformation || {},
+      medicalHistory: emrData.medicalHistory || {},
+      vitalSigns: emrData.vitalSigns || {},
+      chiefComplaint: emrData.chiefComplaint || {},
+      physicalExamination: emrData.physicalExamination || {},
+      diagnosticTests: emrData.diagnosticTests || {},
+      assessmentAndPlan: emrData.assessmentAndPlan || {},
+      progressNotes: emrData.progressNotes || {},
+      doctor: emrData.doctor ? JSON.parse(emrData.doctor) : {},
+    };
+  } else {
+    parsedData = {
+      patientInformation: {},
+      medicalHistory: {},
+      vitalSigns: {},
+      chiefComplaint: {},
+      physicalExamination: {},
+      diagnosticTests: {},
+      assessmentAndPlan: {},
+      progressNotes: {},
+      doctor: {},
+    };
   }
 
-  // Safely parse the JSON strings into objects
-  const parsedData = {
-    patientInformation: emrData.Record.patientInformation || {}, // Provide a fallback
-    medicalHistory: emrData.Record.medicalHistory || {}, // Provide a fallback
-    vitalSigns: emrData.Record.vitalSigns || {}, // Provide a fallback
-    chiefComplaint: emrData.Record.chiefComplaint || {}, // Provide a fallback
-    physicalExamination: emrData.Record.physicalExamination || {}, // Provide a fallback
-    diagnosticTests: emrData.Record.diagnosticTests || {}, // Provide a fallback
-    assessmentAndPlan: emrData.Record.assessmentAndPlan || {}, // Provide a fallback
-    progressNotes: emrData.Record.progressNotes || {}, // Provide a fallback
-    doctor: emrData.Record.doctor ? JSON.parse(emrData.Record.doctor) : {}, // Provide a fallback
+  // Function to filter out unwanted keys
+  const filterData = (data, keysToExclude) => {
+    return Object.fromEntries(
+      Object.entries(data).filter(([key]) => !keysToExclude.includes(key))
+    );
   };
+
+  // Filter the doctor data to exclude specific keys
+  const filteredDoctorData = filterData(parsedData.doctor, ['dateOfBirth', 'sex']);
 
   return (
     <div className="container mx-auto p-4">
@@ -38,7 +71,6 @@ function EmrComp() {
       </button>
 
       <div className="bg-white p-4 rounded-lg border border-gray-300">
-        {/* Display all sections in a single card */}
         <Section title="Patient Information" data={parsedData.patientInformation} />
         <Section title="Medical History" data={parsedData.medicalHistory} />
         <Section title="Vital Signs" data={parsedData.vitalSigns} />
@@ -47,7 +79,7 @@ function EmrComp() {
         <Section title="Diagnostic Tests" data={parsedData.diagnosticTests} />
         <Section title="Assessment and Plan" data={parsedData.assessmentAndPlan} />
         <Section title="Progress Notes" data={parsedData.progressNotes} />
-        <Section title="Doctor Information" data={parsedData.doctor} />
+        <Section title="Doctor Information" data={filteredDoctorData} />
       </div>
     </div>
   );
@@ -59,10 +91,12 @@ const Section = ({ title, data }) => {
     return (
       <div className="mb-4">
         <h2 className="text-2xl font-semibold mb-2 text-blue-600">{title}</h2>
-        <p className="text-sm text-gray-600">No data available.</p>
+        <p class Name="text-sm text-gray-600">No data available.</p>
       </div>
     );
   }
+
+  console.log("Data for section:", title, data); // Log the data for debugging
 
   return (
     <div className="mb-4">
@@ -70,7 +104,7 @@ const Section = ({ title, data }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         {Object.entries(data).map(([key, value]) => (
           <div key={key} className="p-2 border-b border-gray-200">
- <p className="text-sm font-medium text-gray-800">{key.charAt(0).toUpperCase() + key.slice(1)}:</p>
+            <p className="text-sm font-medium text-gray-800">{key.charAt(0).toUpperCase() + key.slice(1)}:</p>
             <p className="text-sm text-gray-600">{value}</p>
           </div>
         ))}

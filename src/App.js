@@ -29,7 +29,7 @@ function App() {
               <>
                 <Route path="/" element={<Home />} />
                 <Route path="/home" element={<Home />} />
-                <Route path="/upload" element={<Upload />} />
+                <Route path="/upload/:id" element={<Upload />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/splash" element={<Splash />} />
                 <Route path="/emr/:id" element={<EmrComp />} />
@@ -44,7 +44,7 @@ function App() {
                 {/* <Route path="/home" element={<Home />} /> */}
                 <Route path="/splash" element={<Splash />} />
                 <Route path="/emr/:id" element={<EmrComp />} />
-                <Route path="/emr" element={<EmrComp />} />
+                
               </>
             )}
           </>
