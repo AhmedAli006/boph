@@ -14,7 +14,7 @@ function History() {
 
   const fetchEmr = async () => {
     try {
-      const result = await axios.get('http://localhost:5000/api/getallemr');
+      const result = await axios.get('http://localhost:5050/api/getallemr');
       const users = result.data.response; // Assuming response is an array of EMR records
       console.log(users);
 

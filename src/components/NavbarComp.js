@@ -27,19 +27,24 @@ navigate("/")
   console.log('Signout button clicked');
 };
 
-const userNavigation = [
-  ...(userData.response.stakeholder === "doctor"
-    ? [
+  const userNavigation = (() => {
+    if (userData.response.email === "admin@gmail.com") {
+      return [
+       
+        { name: 'Sign out', href: '#', onclick: handleSignout },
+      ];
+    } else if (userData.response.stakeholder === "doctor") {
+      return [
         { name: 'Dashboard', href: '/home' },
-        // { name: 'Settings', href: '#' },
-        { name: 'Sign out', href: '#', onclick: () => handleSignout() },
-      ]
-    : [
+        { name: 'Sign out', href: '#', onclick: handleSignout },
+      ];
+    } else {
+      return [
         { name: 'Your Profile', href: '/profile' },
-        // { name: 'Settings', href: '#' },
-        { name: 'Sign out', href: '#', onclick: () => handleSignout() },
-      ]),
-];
+        { name: 'Sign out', href: '#', onclick: handleSignout },
+      ];
+    }
+  })();
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')

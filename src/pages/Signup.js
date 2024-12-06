@@ -79,8 +79,8 @@ const handleSubmit = async (event) => {
     password: password,
     stakeholder: stakeholder,
     dateOfBirth: stakeholder === "patient" ? dateOfBirth : "",
-    sex: stakeholder === "patient" ? sex : "",
-    phone: phone ,
+    sex:  sex ,
+    phone: phone,
     specialization: stakeholder === "doctor" ? specialization : "",
   };
 
@@ -302,7 +302,7 @@ const handleSubmit = async (event) => {
             <SelectComp value={stakeholder} onChange={handleDropdownChange} />
             {stakeholder === "patient" && (
               <div>
-                <div className="flex flex-col pt-2">
+                <div className="flex flex-col mb-4">
                   <div className="flex relative ">
                     <span className="  absolute inline-flex  items-center px-3 py-2.5 text-gray-500  text-sm">
                       {/* Date of Birth Icon */}
@@ -323,7 +323,7 @@ const handleSubmit = async (event) => {
                
               </div>
             )}
-                <div className="flex flex-col mt-4  pb-4">
+                <div className="flex flex-col  pb-4">
                   <div className="flex relative ">
                     <span className="  absolute inline-flex  items-center px-3 py-2.5 text-gray-500  text-sm">
                       {/* Phone Icon */}

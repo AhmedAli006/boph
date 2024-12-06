@@ -103,7 +103,7 @@ const Upload = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost:5000/api/createEMR', { params });
+      const response = await axios.post('http://localhost:5050/api/createEMR', { params });
       console.log('EMR created successfully:', response.data);
       setSuccessMessage('EMR created successfully!'); // Set success message
     } catch (error) {

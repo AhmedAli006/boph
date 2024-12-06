@@ -1,85 +1,120 @@
 // src/AdminPanel.js
-import React, { useState } from 'react';
-
-// Sample data for requests
-const sampleRequests = [
-  { id: 1, user: 'User  1', status: 'approved' },
-  { id: 2, user: 'User  2', status: 'pending' },
-  { id: 3, user: 'User  3', status: 'rejected' },
-  { id: 4, user: 'User  4', status: 'approved' },
-  { id: 5, user: 'User  5', status: 'pending' },
-];
+import React, { useEffect, useState } from 'react';
+import axios from 'axios'; // Ensure axios is imported
+import Navbar from '../components/NavbarComp';
 
 function AdminPanel() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [requests, setRequests] = useState(sampleRequests);
+  const [patients, setPatients] = useState([]); // Initialize patients state
 
-  // Filter requests based on search term
-  const filteredRequests = requests.filter(request =>
-    request.user.toLowerCase().includes(searchTerm.toLowerCase())
+  // Fetch users from the API
+  const fetchUsers = async () => {
+    try {
+      const result = await axios.get('http://localhost:5050/api/getusers');
+      const users = JSON.parse(result.data.response);
+      console.log(users);
+      const filteredPatients = users.filter(user => user.Record.docType === "User" && user.Record.stakeholder === "doctor");
+      console.log("Filtered patients for selection:", filteredPatients);
+      setPatients(filteredPatients);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  // Filter patients based on search term
+  const filteredPatients = patients.filter(patient =>
+    patient.Record.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    patient.Record.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Count requests by status
-  const totalRequests = requests.length;
-  const approvedRequests = requests.filter(r => r.status === 'approved').length;
-  const pendingRequests = requests.filter(r => r.status === 'pending').length;
-  const rejectedRequests = requests.filter(r => r.status === 'rejected').length;
+  const totalPatients = filteredPatients.length;
+  const approvedPatients = filteredPatients.filter(p => p.Record.status === 'approved').length;
+  const pendingPatients = filteredPatients.filter(p => p.Record.status === 'pending').length;
+  const rejectedPatients = filteredPatients.filter(p => p.Record.status === 'rejected').length;
 
   return (
-    <div className="p-5 bg-gray-100 rounded-lg shadow-md">
-      <h1 className="text-2xl text-[#00072D] mb-5">Admin Panel</h1>
+    <>
+      <Navbar />
+      <div className="p-5 rounded-lg">
+        {/* Card for patient statistics */}
+        <div className="flex justify-around mb-5">
+          <div className="bg-white border border-gray-300 rounded-lg p-4 text-center shadow">
+            <h4 className="text-[#00072D]">Total Patients</h4>
+            <p className="text-2xl font-bold text-[#00072D]">{totalPatients}</p>
+          </div>
+          <div className="bg-white border-l-4 border-green-500 rounded-lg p-4 text-center shadow">
+            <h4 className="text-[#00072D]">Approved</h4>
+            <p className="text-2xl font-bold text-[#00072D]">{approvedPatients}</p>
+          </div>
+          <div className="bg-white border-l-4 border-orange-500 rounded-lg p-4 text-center shadow">
+            <h4 className="text-[#00072D]">Pending</h4>
+            <p className="text-2xl font-bold text-[#00072D]">{pendingPatients}</p>
+          </div>
+          <div className="bg-white border-l-4 border-red-500 rounded-lg p-4 text-center shadow">
+            <h4 className="text-[#00072D]">Rejected</h4>
+            <p className="text-2xl font-bold text-[#00072D]">{rejectedPatients}</p>
+          </div>
+        </div>
 
-      {/* Card for request statistics */}
-<div className="flex justify-around mb-5">
-  <div className="bg-white border border-gray-300 rounded-lg p-4 text-center shadow">
-    <h4 className="text-[#00072D]">Total Requests</h4>
-    <p className="text-2xl font-bold text-[#00072D]">{totalRequests}</p>
-  </div>
-  <div className="bg-white border-l-4 border-green-500 rounded-lg p-4 text-center shadow">
-    <h4 className="text-[#00072D]">Approved</h4>
-    <p className="text-2xl font-bold text-[#00072D]">{approvedRequests}</p>
-  </div>
-  <div className="bg-white border-l-4 border-orange-500 rounded-lg p-4 text-center shadow">
-    <h4 className="text-[#00072D]">Pending</h4>
-    <p className="text-2xl font-bold text-[#00072D]">{pendingRequests}</p>
-  </div>
-  <div className="bg-white border-l-4 border-red-500 rounded-lg p-4 text-center shadow">
-    <h4 className="text-[#00072D]">Rejected</h4>
-    <p className="text-2xl font-bold text-[#00072D]">{rejectedRequests}</p>
-  </div>
-</div>
+        {/* Search bar */}
+        <input
+          type="text"
+          placeholder="Search by name or email..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="mb-5 p-2 w-full border border-gray-300 rounded"
+        />
 
-      {/* Search bar */}
-      <input
-        type="text"
-        placeholder="Search by user..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="mb-5 p-2 w-full border border-gray-300 rounded"
-      />
+        {/* Table for patients */}
 
-      {/* Table for requests */}
-      <table className="w-full border-collapse">
-        <thead>
-          <tr className="bg-[#00072D] text-white          ">
-            <th className="border border-gray-300 p-2">ID</th>
-            <th className="border border-gray-300 p-2">User </th>
-            <th className="border border-gray-300 p-2">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredRequests.map(request => (
-            <tr key={request.id}>
-              <td className="border border-gray-300 p-2">{request.id}</td>
-              <td className="border border-gray-300 p-2">{request.user}</td>
-              <td className={`border border-gray-300 p-2 ${getStatusColorClass(request.status)}`}>
-                {request.status}
-              </td>
+
+        <table className="min-w-full rounded border ">
+          <thead>
+            <tr className="bg-[#00072D] text-white ">
+              <th className="px-3 py-3  font-bold  text-white uppercase align-middle">ID</th>
+              <th className="px-3 py-3  font-bold  text-white uppercase align-middle">Name</th>
+              <th className="px-3 py-3  font-bold  text-white uppercase align-middle">Email</th>
+              <th className="px-3 py-3  font-bold  text-white uppercase align-middle">Specialization</th>
+              <th className="px-3 py-3  font-bold  text-white uppercase align-middle">Status</th>
+              <th className="px-3 py-3  font-bold  text-white uppercase align-middle"> </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {filteredPatients.map(patient => (
+              <tr key={patient.Key}>
+                <td className="px-3 py-3 text-[#00072D]  text-left   align-middle">{patient.Record.id.slice(0,8)}...</td>
+                <td className="px-3 py-3 text-[#00072D]  text-left   align-middle">{patient.Record.name}</td>
+                <td className="px-3 py-3 text-[#00072D]  text-left   align-middle">{patient.Record.email}</td>
+                <td className="px-3 py-3 text-[#00072D]  text-left   align-middle">{patient.Record.specialization}</td>
+                <td className={`px-3 py-3   text-left   align-middle ${getStatusColorClass(patient.Record.status)}`}>
+                  {patient.Record.status}
+                </td>
+                   <td className="px-3 py-3 text-[#00072D]  text-left text-white uppercase align-middle">
+                  <button 
+                    onClick={() => console.log(patient.Record.id)} 
+                    className="bg-green-500 text-white px-2 py-1 rounded mr-2"
+                  >
+                    Approve
+                  </button>
+                  <button 
+                    onClick={() => console.log(patient.Record.id)} 
+                    className="bg-red-500 text-white px-2 py-1 rounded"
+                  >
+                    Reject
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      
+              </div>
+    </>
   );
 }
 
