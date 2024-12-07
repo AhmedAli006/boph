@@ -6,8 +6,30 @@ import Navbar from '../components/NavbarComp';
 function AdminPanel() {
   const [searchTerm, setSearchTerm] = useState('');
   const [patients, setPatients] = useState([]); // Initialize patients state
+  const [loadingId, setLoadingId] = useState(null); // Track loading state for each button
 
   // Fetch users from the API
+  const handleAccess = async (userId, action) => {
+    const params = {
+      id: userId,
+      action: action
+    };
+    
+    setLoadingId(userId); // Set loading state for the specific userId
+
+    try {
+      const result = await axios.put(`http://localhost:5050/api/updateUser/${userId}`, params);
+      
+      console.log("Changing user access:", result.data);
+      // Optionally, you can refetch users to update the state
+      fetchUsers();
+    } catch (error) {
+      console.error('Error changing user access:', error);
+    } finally {
+      setLoadingId(null); // Reset loading state
+    }
+  };
+
   const fetchUsers = async () => {
     try {
       const result = await axios.get('http://localhost:5050/api/getusers');
@@ -67,53 +89,62 @@ function AdminPanel() {
           placeholder="Search by name or email..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="mb-5 p-2 w-full border border-gray-300 rounded"
+          className="mb-5 p-2 w-full border border gray-300 rounded"
         />
 
         {/* Table for patients */}
-
-
         <table className="min-w-full rounded border ">
           <thead>
             <tr className="bg-[#00072D] text-white ">
-              <th className="px-3 py-3  font-bold  text-white uppercase align-middle">ID</th>
-              <th className="px-3 py-3  font-bold  text-white uppercase align-middle">Name</th>
-              <th className="px-3 py-3  font-bold  text-white uppercase align-middle">Email</th>
-              <th className="px-3 py-3  font-bold  text-white uppercase align-middle">Specialization</th>
-              <th className="px-3 py-3  font-bold  text-white uppercase align-middle">Status</th>
-              <th className="px-3 py-3  font-bold  text-white uppercase align-middle"> </th>
+              <th className="px-3 py-3 font-bold text-white uppercase align-middle">ID</th>
+              <th className="px-3 py-3 font-bold text-white uppercase align-middle">Name</th>
+              <th className="px-3 py-3 font-bold text-white uppercase align-middle">Email</th>
+              <th className="px-3 py-3 font-bold text-white uppercase align-middle">Specialization</th>
+              <th className="px-3 py-3 font-bold text-white uppercase align-middle">Status</th>
+              <th className="px-3 py-3 font-bold text-white uppercase align-middle"> </th>
             </tr>
           </thead>
           <tbody>
             {filteredPatients.map(patient => (
               <tr key={patient.Key}>
-                <td className="px-3 py-3 text-[#00072D]  text-left   align-middle">{patient.Record.id.slice(0,8)}...</td>
-                <td className="px-3 py-3 text-[#00072D]  text-left   align-middle">{patient.Record.name}</td>
-                <td className="px-3 py-3 text-[#00072D]  text-left   align-middle">{patient.Record.email}</td>
-                <td className="px-3 py-3 text-[#00072D]  text-left   align-middle">{patient.Record.specialization}</td>
-                <td className={`px-3 py-3   text-left   align-middle ${getStatusColorClass(patient.Record.status)}`}>
+                <td className="px-3 py-3 text-[#00072D] text-left align-middle">{patient.Record.id.slice(0, 8)}...</td>
+                <td className="px-3 py-3 text-[#00072D] text-left align-middle">{patient.Record.name}</td>
+                <td className="px-3 py-3 text-[#00072D] text-left align-middle">{patient.Record.email}</td>
+                <td className="px-3 py-3 text-[#00072D] text-left align-middle">{patient.Record.specialization}</td>
+                <td className={`px-3 py-3 text-left align-middle ${getStatusColorClass(patient.Record.status)}`}>
                   {patient.Record.status}
                 </td>
-                   <td className="px-3 py-3 text-[#00072D]  text-left text-white uppercase align-middle">
-                  <button 
-                    onClick={() => console.log(patient.Record.id)} 
-                    className="bg-green-500 text-white px-2 py-1 rounded mr-2"
-                  >
-                    Approve
-                  </button>
-                  <button 
-                    onClick={() => console.log(patient.Record.id)} 
-                    className="bg-red-500 text-white px-2 py-1 rounded"
-                  >
-                    Reject
-                  </button>
+                <td className="px-3 py-3 text-[#00072D] text-left text-white uppercase align-middle">
+                  {loadingId === patient.Record.id ? (
+                    <span className="flex justify-center">
+                  <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                  </svg>
+                  Loading...
+                </span> // Replace with your loading spinner
+                  ) : (
+                    <>
+                      <button 
+                        onClick={() => handleAccess(patient.Record.id, 'approved')} 
+                        className="bg-green-500 text-white px-2 py-1 rounded mr-2"
+                      >
+                        Approve
+                      </button>
+                      <button 
+                        onClick={() => handleAccess(patient.Record.id, 'rejected')} 
+                        className="bg-red-500 text-white px-2 py-1 rounded"
+                      >
+                        Reject
+                      </button>
+                    </>
+                  )}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-      
-              </div>
+      </div>
     </>
   );
 }
