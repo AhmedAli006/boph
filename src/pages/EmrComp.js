@@ -58,7 +58,7 @@ function EmrComp() {
   };
 
   // Filter the doctor data to exclude specific keys
-  const filteredDoctorData = filterData(parsedData.doctor, ['dateOfBirth', 'sex']);
+  const filteredDoctorData = filterData(parsedData.doctor, ['dateOfBirth', 'sex','statusMessage']);
 
   return (
     <div className="container mx-auto p-4">
@@ -81,6 +81,12 @@ function EmrComp() {
         <Section title="Progress Notes" data={parsedData.progressNotes} />
         <Section title="Doctor Information" data={filteredDoctorData} />
       </div>
+       <button
+        onClick={() => navigate(-1)} // Navigate back to the previous page
+        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+      >
+        Back
+      </button>
     </div>
   );
 }

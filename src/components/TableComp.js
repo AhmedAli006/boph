@@ -9,7 +9,7 @@ function Table() {
 
   const fetchUsers = async () => {
     try {
-      const result = await axios.get('http://localhost:5000/api/getusers');
+      const result = await axios.get('http://localhost:5050/api/getusers');
       const users = JSON.parse(result.data.response);
       console.log(users);
       const filteredPatients = users.filter(user => user.Record.docType === "User" && user.Record.stakeholder === "patient");

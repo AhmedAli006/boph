@@ -17,7 +17,7 @@ function Profile() {
             console.log('EMR data retrieved:', response.data.response);
 
             // Filter EMR data based on the logged-in user
-            const filteredEmrData = response.data.response.filter(item => item.Record.patientInformation.patientId === userData.response.id);
+            const filteredEmrData = response.data.response.filter(item => item.Record.patientInformation.id === userData.response.id);
 
             setEmrData(filteredEmrData); // Store the filtered EMR data in state
         } catch (error) {
@@ -25,7 +25,7 @@ function Profile() {
             // Optionally, show an error message to the user
         }
     };
-// console.log(emrData)
+console.log(emrData,'emrDAta')
     useEffect(() => {
         getEmr();
     }, []);

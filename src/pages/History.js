@@ -8,9 +8,11 @@ function History() {
   const [emrData, setEmrData] = useState([]);
   const [patientInfo, setPatientInfo] = useState(null); // State to hold patient information
   const [searchQuery, setSearchQuery] = useState('');
+  
   const { id } = useParams();
 
   const navigate = useNavigate();
+  
 
   const fetchEmr = async () => {
     try {
@@ -21,7 +23,7 @@ function History() {
       // Filter for EMR records that match the patient ID
       const filteredPatients = users.filter(user => {
         const record = user.Record.patientInformation;
-        return user.Record.docType === "EMR" && record.patientId === id;
+        return user.Record.docType === "EMR" && record.id === id;
       });
 
       console.log("Filtered patients for selection:", filteredPatients);
@@ -33,9 +35,24 @@ function History() {
       console.error('Error fetching users:', error);
     }
   };
+      const [patients, setPatients] = useState([]);
+  
+
+  const fetchUsers = async () => {
+    try {
+      const result = await axios.get('http://localhost:5050/api/getusers');
+      const users = JSON.parse(result.data.response);
+      const filteredPatients = users.filter(user => user.Record.docType === "User" && user.Record.id === id);
+      setPatients(filteredPatients[0].Record);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
+   
 
   useEffect(() => {
     fetchEmr();
+    fetchUsers()
   }, []);
 
   // Filtered data based on search query
@@ -47,6 +64,19 @@ function History() {
       patient.Record.chiefComplaint.chiefComplaint.toLowerCase().includes(searchQuery.toLowerCase())
     );
   });
+  const generateAge = (dateOfBirth) => {
+  const birthDate = new Date(dateOfBirth);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDifference = today.getMonth() - birthDate.getMonth();
+
+  // Adjust age if the birthday hasn't occurred yet this year
+  if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+
+  return age;
+};
 
   return (
     <>
@@ -57,29 +87,20 @@ function History() {
           <div className="w-full px-5 mx-auto lg:container">
             <div className="mx-auto">
       {/* Patient Information Section */}
-              {patientInfo && (
+              {patients && (
                 <div className="p-2 mb-4 border rounded-md shadow-sm bg-gray-50 mt-5">
                   <h2 className="text-md font-semibold">Patient Information</h2>
                   <div className="grid grid-cols-2 gap-2 text-sm">
-                    <p><strong>Name:</strong> {patientInfo.name}</p>
-                    <p><strong>Patient ID:</strong> {patientInfo.patientId}</p>
-                    <p><strong>Date of Birth:</strong> {patientInfo.dateOfBirth}</p>
-                    <p><strong>Age:</strong> {patientInfo.age}</p>
-                    <p><strong>Sex:</strong> {patientInfo.sex}</p>
-                    <p><strong>Address:</strong> {patientInfo.address}</p>
-                    <p><strong>Phone Number:</strong> {patientInfo.phoneNumber}</p>
-                    <p><strong>Email:</strong> {patientInfo.email}</p>
+                    <p><strong>Name:</strong> {patients.name}</p>
+                    <p><strong>Patient ID:</strong> {patients.id}</p>
+                    <p><strong>Date of Birth:</strong> {patients.dateOfBirth}</p>
+                    <p><strong>Age:</strong> {generateAge(patients.dateOfBirth)}</p>
+                    <p><strong>Sex:</strong> {patients.sex}</p>
+                    <p><strong>Phone Number:</strong> {patients.phone}</p>
+                    <p><strong>Email:</strong> {patients.email}</p>
                   </div>
 
-                  {/* Create EMR Button */}
-                  <div className="flex justify-end mt-2">
-                    <button
-                      className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded text-sm"
-                      onClick={() => navigate(`/upload/${patientInfo.patientId}`, { state: patientInfo })} // Adjust the path as needed
-                    >
-                      Create EMR
-                    </button>
-                  </div>
+                
                 </div>
               )}
               {/* Search Bar */}
@@ -116,7 +137,15 @@ function History() {
                         Complaint
                       </th>
                       <th className="py-3 text-xs font-normal text-left text-gray-500 uppercase align-middle">
-                        Actions
+                          {/* Create EMR Button */}
+                  <div className="flex justify-center ">
+                    <button
+                      className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded text-sm"
+                      onClick={() => navigate(`/upload/${patients.id}`,{state:patients})} // Adjust the path as needed
+                    >
+                      Create EMR
+                    </button>
+                  </div>
                       </th>
                     </tr>
                   </thead>
@@ -132,9 +161,9 @@ function History() {
                           <td className="px-3 py-4">{doctorInfo.specialization}</td>
                           <td className="px-3 py-4">{dateOfIssue.dateOfIssue}</td>
                           <td className="px-3 py-4">{complaint.chiefComplaint}</td>
-                          <td className="px-3 py-4">
+                          <td className="px-3 py-4 text-center">
                             <button
-                              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                              className="bg-blue-500 hover:bg-blue-700  text-white font-bold py-2 px-4 rounded"
                               onClick={() => navigate(`/emr/${patient.Record.id}`, { state: patient.Record })}
                             >
                               View

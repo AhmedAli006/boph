@@ -6,27 +6,41 @@ import { v4 as uuidv4 } from 'uuid';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 const Upload = () => {
   const { id } = useParams();
   const location = useLocation();
   const patientData = location.state; // Get patient data from location state
   console.log(id, patientData);
+    const navigate = useNavigate();
+  
 
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+   const generateAge = (dateOfBirth) => {
+    const birthDate = new Date(dateOfBirth);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return age;
+  };
   
   // Set initial patient information from patientData
   const [patientInformation, setPatientInformation] = useState({
-    patientId: patientData.patientId,
+    id: patientData.id,
     name: patientData.name,
     dateOfBirth: patientData.dateOfBirth,
-    age: patientData.age,
+    age: generateAge(patientData.dateOfBirth),
     sex: patientData.sex,
     address: patientData.address,
-    phoneNumber: patientData.phoneNumber,
+    phoneNumber: patientData.phone,
     email: patientData.email
   });
 
@@ -76,7 +90,8 @@ const Upload = () => {
   });
 
   const currentDate = new Date().toISOString().split('T')[0];
-  const { userData, isLoading } = useSelector(state => state.auth);
+ 
+  const { userData } = useSelector(state => state.auth);
   console.log("user data Login page", userData);
 
   const handleSubmit = async (event) => {
@@ -106,6 +121,10 @@ const Upload = () => {
       const response = await axios.post('http://localhost:5050/api/createEMR', { params });
       console.log('EMR created successfully:', response.data);
       setSuccessMessage('EMR created successfully!'); // Set success message
+     setTimeout(() => {
+      navigate(-1);
+    }, 2000);
+
     } catch (error) {
       console.error('Error creating EMR:', error);
       setErrorMessage('Error creating EMR. Please try again.'); // Set error message
@@ -144,7 +163,7 @@ const Upload = () => {
                     <Form.Label>Patient ID</Form.Label>
                     <Form.Control
                       type="text"
-                      value={patientInformation.patientId}
+                      value={patientInformation.id}
                       readOnly
                     />
                   </Col>
@@ -166,6 +185,7 @@ const Upload = () => {
                       readOnly
                     />
                   </Col>
+                  
                   <Col md={6}>
                     <Form.Label>Sex</Form.Label>
                     <Form.Control
@@ -181,7 +201,7 @@ const Upload = () => {
                     <Form.Control
                       type="text"
                       value={patientInformation.address}
-                      readOnly
+                      
                     />
                   </Col>
                   <Col md={6}>
@@ -199,6 +219,14 @@ const Upload = () => {
                     <Form.Control
                       type="email"
                       value={patientInformation.email}
+                      readOnly
+                    />
+                  </Col>
+                  <Col md={6}>
+                    <Form.Label>Age</Form.Label>
+                    <Form.Control
+                      type="age"
+                      value={patientInformation.age}
                       readOnly
                     />
                   </Col>

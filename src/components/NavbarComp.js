@@ -13,8 +13,8 @@ function Navbar() {
   console.log("user data Main App ", userData);
 
 const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
+  name: userData.response.name,
+  email: userData.response.email,
   imageUrl: avatar,
 }
    const dispatch = useDispatch();
@@ -49,6 +49,11 @@ navigate("/")
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
+const getInitials = (name) => {
+    const nameParts = name.split(' ');
+    const initials = nameParts.map(part => part.charAt(0)).join('').toUpperCase();
+    return initials.length > 2 ? initials.slice(0, 2) : initials; // Limit to 2 initials
+  };
   return (
     <>
      <div className="min-h-full ">
@@ -60,10 +65,17 @@ function classNames(...classes) {
             <>
               <div  className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                  <div className="flex h-16 items-center justify-between">
-                  <div className="flex items-center">
+                 <div className="flex  ">
                     {/* Logo Image on the left */}
-                    <img src={logo} onClick={()=>{navigate("/")}} alt="Logo" style={{width:50,height:50,padding:2}} className=" mr-3 bg-white rounded-full" /> {/* Adjust size as needed */}
-                  </div>
+                    <img
+                      src={logo}
+                      onClick={() => { navigate("/") }}
+                      alt="Logo"
+                      style={{ width: 50, height: 50, padding: 2 }}
+                      className="mr-3 bg-white rounded-full cursor-pointer"
+                    />
+                   
+                    </div>
                   <div className="flex items-center">
                     
                    
@@ -74,11 +86,22 @@ function classNames(...classes) {
                     <div className="ml-4 flex items-center md:ml-6">
                       {/* Profile dropdown */}
                       <Menu as="div" className="relative ml-3">
-                        <div>
+                        <div className='relative group'>
                           <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                             <span className="absolute -inset-1.5" />
                             <span className="sr-only">Open user menu</span>
-                            <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" />
+                            {/* Avatar with initials */}
+                            <div style={{
+fontSize: '25px',
+                              fontFamily: 'meshed'
+                            }} className="h-8 w-8 rounded-full flex items-center justify-center bg-gray-600 text-white ">
+                              {getInitials(user.name)}
+                            </div>
+                             {/* Tooltip for name and email */}
+                    <div className="absolute items-center left-0 top-12 hidden group-hover:block bg-gray-800 text-white text-sm rounded p-2">
+                      <p>{user.name}</p>
+                      <p>{user.email}</p>
+                    </div>
                           </Menu.Button>
                         </div>
 
