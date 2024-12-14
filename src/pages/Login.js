@@ -35,7 +35,8 @@ const [email, setEmail] = useState('');
       navigate('/');
     } else {
       // Show an alert for error
-      alert('Login failed. Please check your credentials and try again.');
+   
+      alert(resultAction.payload);
     }
   
   };

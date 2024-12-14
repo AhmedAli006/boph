@@ -2,12 +2,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'; // Ensure axios is imported
 import Navbar from '../components/NavbarComp';
+import SearchBar from '../components/SearchBar';
 
 function AdminPanel() {
-  const [searchTerm, setSearchTerm] = useState('');
+
   const [patients, setPatients] = useState([]); // Initialize patients state
   const [loadingId, setLoadingId] = useState(null); // Track loading state for each button
-
+const [searchQuery, setSearchQuery] = useState('');
   // Fetch users from the API
   const handleAccess = async (userId, action) => {
     const params = {
@@ -49,8 +50,8 @@ function AdminPanel() {
 
   // Filter patients based on search term
   const filteredPatients = patients.filter(patient =>
-    patient.Record.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    patient.Record.email.toLowerCase().includes(searchTerm.toLowerCase())
+    patient.Record.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    patient.Record.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   // Count requests by status
@@ -84,13 +85,12 @@ function AdminPanel() {
         </div>
 
         {/* Search bar */}
-        <input
-          type="text"
-          placeholder="Search by name or email..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="mb-5 p-2 w-full border border gray-300 rounded"
-        />
+         <SearchBar
+                    searchQuery={searchQuery}
+                    setSearchQuery={setSearchQuery}
+                    placeholder="Search by name or email..."
+                />
+
 
         {/* Table for patients */}
         <table className="min-w-full rounded border ">
@@ -122,7 +122,7 @@ function AdminPanel() {
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
                   </svg>
                   Loading...
-                </span> // Replace with your loading spinner
+                </span>
                   ) : (
                     <>
                       <button 

@@ -17,13 +17,14 @@ function App() {
   const isAdmin = isAuthenticated && userData.response.email === "admin@gmail.com";
   const isDoctor = isAuthenticated && userData.response.stakeholder === "doctor";
   const userStatus = isAuthenticated ? userData.response.status : null; // Get user status
+  console.log(isDoctor,"docter");
 
   return (
     <Router>
       <Routes>
         {isAuthenticated ? (
           <>
-            {userStatus === "pending" && isDoctor === "patient" ? (
+            {userStatus === "pending" && isDoctor === true ? (
               // Show splash screen if the user's status is pending
               <Route path="/" element={<Splash />} />
             ) : (

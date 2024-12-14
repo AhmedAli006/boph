@@ -13,10 +13,10 @@ function Navbar() {
   console.log("user data Main App ", userData);
 
 const user = {
-  name: userData.response.name,
-  email: userData.response.email,
-  imageUrl: avatar,
-}
+    name: userData?.response?.name || 'Admin', // Fallback to 'User ' if name is undefined
+    email: userData?.response?.email || 'admin@gmail.com', // Fallback email
+    imageUrl: avatar,
+  };
    const dispatch = useDispatch();
   const navigate = useNavigate();
 

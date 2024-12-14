@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import NavbarComp from '../components/NavbarComp';
 import axios from 'axios';
 import {  useNavigate, useParams } from 'react-router-dom';
+import SearchBar from '../components/SearchBar';
 
 function History() {
   const [emrData, setEmrData] = useState([]);
@@ -105,16 +106,11 @@ function History() {
               )}
               {/* Search Bar */}
               <div className="flex flex-row items-center justify-center w-full p-2 mt-3 shadow-xs">
-                <span style={{ width: "1080px", height: 50 }} className="flex h-10 text-sm rounded-full cursor-pointer ">
-                  <input
-                    type="search"
-                    name="search"
-                    placeholder="Search by name, email, or phone"
-                    className="flex-grow px-4 text-sm rounded-l-full border border-gray-500 rounded-r-full focus:outline-none"
-                    value={searchQuery} // Bind the input value to searchQuery
-                    onChange={(e) => setSearchQuery(e.target.value)} // Update searchQuery on input change
-                  />
-                </span>
+               <SearchBar
+                                    searchQuery={searchQuery}
+                                    setSearchQuery={setSearchQuery}
+                                    placeholder="Search by Doctor's Name, Specialization, or Chief Complaint"
+                                />
               </div>
 
               <div className="w-full my-4 overflow-x-auto border rounded-md shadow-sm dark:border-gray-700">
