@@ -94,11 +94,55 @@ const Upload = () => {
   const { userData } = useSelector(state => state.auth);
   console.log("user data Login page", userData);
 
+   const validateForm = () => {
+    // Check if all required fields are filled
+    const requiredFields = [
+      patientInformation.name,
+      patientInformation.dateOfBirth,
+      patientInformation.sex,
+      patientInformation.address,
+      patientInformation.phoneNumber,
+      patientInformation.email,
+      medicalHistory.allergies,
+      medicalHistory.medications,
+      medicalHistory.medicalConditions,
+      medicalHistory.surgicalHistory,
+      medicalHistory.familyMedicalHistory,
+      vitalSigns.temperature,
+      vitalSigns.bloodPressure,
+      vitalSigns.pulse,
+      vitalSigns.respiratoryRate,
+      chiefComplaint.chiefComplaint,
+      chiefComplaint.historyOfPresentIllness,
+      chiefComplaint.reviewOfSystems,
+      physicalExamination.examinationDetails,
+      diagnosticTests.labResults,
+      diagnosticTests.otherTests,
+      assessmentAndPlan.assessment,
+      assessmentAndPlan.plan,
+      assessmentAndPlan.medications,
+      assessmentAndPlan.therapies,
+      assessmentAndPlan.followUp,
+      progressNotes.date,
+      progressNotes.time,
+      progressNotes.note
+    ];
+
+      return requiredFields.every(field => (field || '').trim() !== '');
+  };
+
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true); // Start loading
     setSuccessMessage(''); // Reset messages
     setErrorMessage('');
+
+      if (!validateForm()) {
+      setErrorMessage('Please fill in all required fields before submitting.');
+      setLoading(false);
+      return;
+    }
 
     const id = uuidv4();
     const params = {
@@ -133,7 +177,7 @@ const Upload = () => {
       setTimeout(() => {
         setSuccessMessage('');
         setErrorMessage('');
-      }, 3000); // Clear messages after 3 seconds
+      }, 2000); // Clear messages after 3 seconds
     }
   };
 
@@ -172,7 +216,7 @@ const Upload = () => {
                     <Form.Control
                       type="text"
                       value={patientInformation.name}
-                      readOnly
+                      
                     />
                   </Col>
                 </Row>
@@ -182,7 +226,7 @@ const Upload = () => {
                     <Form.Control
                       type="date"
                       value={patientInformation.dateOfBirth}
-                      readOnly
+                      
                     />
                   </Col>
                   
@@ -209,7 +253,7 @@ const Upload = () => {
                     <Form.Control
                       type="text"
                       value={patientInformation.phoneNumber}
-                      readOnly
+                      
                     />
                   </Col>
                 </Row>

@@ -35,8 +35,8 @@ const [email, setEmail] = useState('');
       navigate('/');
     } else {
       // Show an alert for error
-   
-      alert(resultAction.payload);
+   const error = resultAction.payload.error
+      alert(error);
     }
   
   };
