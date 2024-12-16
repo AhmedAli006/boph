@@ -44,6 +44,7 @@ const Upload = () => {
     email: patientData.email
   });
 
+console.log('Address:', patientInformation.address);
   const [medicalHistory, setMedicalHistory] = useState({
     allergies: '',
     medications: '',
@@ -94,42 +95,117 @@ const Upload = () => {
   const { userData } = useSelector(state => state.auth);
   console.log("user data Login page", userData);
 
-   const validateForm = () => {
-    // Check if all required fields are filled
-    const requiredFields = [
-      patientInformation.name,
-      patientInformation.dateOfBirth,
-      patientInformation.sex,
-      patientInformation.address,
-      patientInformation.phoneNumber,
-      patientInformation.email,
-      medicalHistory.allergies,
-      medicalHistory.medications,
-      medicalHistory.medicalConditions,
-      medicalHistory.surgicalHistory,
-      medicalHistory.familyMedicalHistory,
-      vitalSigns.temperature,
-      vitalSigns.bloodPressure,
-      vitalSigns.pulse,
-      vitalSigns.respiratoryRate,
-      chiefComplaint.chiefComplaint,
-      chiefComplaint.historyOfPresentIllness,
-      chiefComplaint.reviewOfSystems,
-      physicalExamination.examinationDetails,
-      diagnosticTests.labResults,
-      diagnosticTests.otherTests,
-      assessmentAndPlan.assessment,
-      assessmentAndPlan.plan,
-      assessmentAndPlan.medications,
-      assessmentAndPlan.therapies,
-      assessmentAndPlan.followUp,
-      progressNotes.date,
-      progressNotes.time,
-      progressNotes.note
-    ];
+const validatePatientInformation = () => {
+  const errors = [];
+  
+  // Check required fields for Patient Information
+  if (!patientInformation.name?.trim()) {
+    errors.push('Name is required.');
+  }
+  if (!patientInformation.dateOfBirth?.trim()) {
+    errors.push('Date of Birth is required.');
+  }
+  if (!patientInformation.sex?.trim()) {
+    errors.push('Sex is required.');
+  }
+  if (!patientInformation.address?.trim()) {
+    errors.push('Address is required.');
+  }
+  if (!patientInformation.phoneNumber?.trim()) {
+    errors.push('Phone Number is required.');
+  }
+  if (!patientInformation.email?.trim()) {
+    errors.push('Email is required.');
+  }
 
-      return requiredFields.every(field => (field || '').trim() !== '');
+  // Check required fields for Medical History
+  if (!medicalHistory.allergies?.trim()) {
+    errors.push('Allergies are required.');
+  }
+  if (!medicalHistory.medications?.trim()) {
+    errors.push('Medications are required.');
+  }
+  if (!medicalHistory.medicalConditions?.trim()) {
+    errors.push('Medical Conditions are required.');
+  }
+  if (!medicalHistory.surgicalHistory?.trim()) {
+    errors.push('Surgical History is required.');
+  }
+  if (!medicalHistory.familyMedicalHistory?.trim()) {
+    errors.push('Family Medical History is required.');
+  }
+
+  // Check required fields for Vital Signs
+  if (!vitalSigns.temperature?.trim()) {
+    errors.push('Temperature is required.');
+  }
+  if (!vitalSigns.bloodPressure?.trim()) {
+    errors.push('Blood Pressure is required.');
+  }
+  if (!vitalSigns.pulse?.trim()) {
+    errors.push('Pulse is required.');
+  }
+  if (!vitalSigns.respiratoryRate?.trim()) {
+    errors.push('Respiratory Rate is required.');
+  }
+
+  // Check required fields for Chief Complaint
+  if (!chiefComplaint.chiefComplaint?.trim()) {
+    errors.push('Chief Complaint is required.');
+  }
+  if (!chiefComplaint.historyOfPresentIllness?.trim()) {
+    errors.push('History of Present Illness is required.');
+  }
+  if (!chiefComplaint.reviewOfSystems?.trim()) {
+    errors.push('Review of Systems is required.');
+  }
+
+  // Check required fields for Physical Examination
+  if (!physicalExamination.examinationDetails?.trim()) {
+    errors.push('Examination Details are required.');
+  }
+
+  // Check required fields for Diagnostic Tests
+  if (!diagnosticTests.labResults?.trim()) {
+    errors.push('Lab Results are required.');
+  }
+  if (!diagnosticTests.otherTests?.trim()) {
+    errors.push('Other Tests are required.');
+  }
+
+  // Check required fields for Assessment and Plan
+  if (!assessmentAndPlan.assessment?.trim()) {
+    errors.push('Assessment is required.');
+  }
+  if (!assessmentAndPlan.plan?.trim()) {
+    errors.push('Plan is required.');
+  }
+  if (!assessmentAndPlan.medications?.trim()) {
+    errors.push('Medications are required.');
+  }
+  if (!assessmentAndPlan.therapies?.trim()) {
+    errors.push('Therapies are required.');
+  }
+  if (!assessmentAndPlan.followUp?.trim()) {
+    errors.push('Follow-up is required.');
+  }
+
+  // Check required fields for Progress Notes
+  if (!progressNotes.date?.trim()) {
+    errors.push('Date is required.');
+  }
+  if (!progressNotes.time?.trim()) {
+    errors.push('Time is required.');
+  }
+  if (!progressNotes.note?.trim()) {
+    errors.push('Note is required.');
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors
   };
+};
 
 
   const handleSubmit = async (event) => {
@@ -138,11 +214,13 @@ const Upload = () => {
     setSuccessMessage(''); // Reset messages
     setErrorMessage('');
 
-      if (!validateForm()) {
-      setErrorMessage('Please fill in all required fields before submitting.');
-      setLoading(false);
-      return;
-    }
+    const { isValid, errors } = validatePatientInformation();
+
+  if (!isValid) {
+    setErrorMessage(errors.join(' ')); // Join errors into a single string
+    setLoading(false);
+    return;
+  }
 
     const id = uuidv4();
     const params = {
@@ -245,7 +323,11 @@ const Upload = () => {
                     <Form.Control
                       type="text"
                       value={patientInformation.address}
-                      
+                      onChange={(event) =>
+    setPatientInformation({
+      ...patientInformation,
+      address: event.target.value
+    })}
                     />
                   </Col>
                   <Col md={6}>

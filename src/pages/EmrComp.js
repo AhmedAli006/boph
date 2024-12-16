@@ -78,7 +78,7 @@ function EmrComp() {
         <Section title="Physical Examination" data={parsedData.physicalExamination} />
         <Section title="Diagnostic Tests" data={parsedData.diagnosticTests} />
         <Section title="Assessment and Plan" data={parsedData.assessmentAndPlan} />
-        <Section title="Progress Notes" data={parsedData.progressNotes} />
+        <Section title="Progress Notes & follow up" data={parsedData.progressNotes} />
         <Section title="Doctor Information" data={filteredDoctorData} />
       </div>
        <button
